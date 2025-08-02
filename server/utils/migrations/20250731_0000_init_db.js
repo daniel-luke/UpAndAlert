@@ -1,12 +1,11 @@
 export function up(knex) {
     return knex.schema.createTable('users', (table) => {
         table.increments('id').primary();
-        table.string('name').notNullable();
-        table.string('username').unique().notNullable();
-        table.string('password').notNullable();
-        table.string('email').unique();
-        table.boolean('isAdmin').defaultTo(false);
-        table.timestamps(true, true);
+        table.string('email').unique().notNullable();
+        table.string('password_hash').notNullable();
+        table.string('first_name').notNullable();
+        table.string('last_name').notNullable();
+        table.boolean('is_admin').notNullable().defaultTo(false);
     });
 }
 

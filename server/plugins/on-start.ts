@@ -1,8 +1,7 @@
 import {Logger} from "~~/server/utils/Logger";
 import {Knex} from "knex";
-import {generateRandomString} from "~~/server/utils/generators/randoms";
 import {DatabaseService} from "~~/server/modules/core/services/DatabaseService";
-import {UserService} from "~~/server/modules/auth/services/User";
+import {UserService} from "~~/server/modules/auth/services/UserService";
 
 const logger = Logger.getInstance();
 
@@ -42,15 +41,17 @@ async function prepareDatabase(): Promise<Knex | null> {
 }
 
 async function bootstrap() {
-    const generatedPassword = generateRandomString(32);
-    await UserService.getInstance().createUser(
-        "admin",
-        "admin",
-        "admin@localhost",
-        generatedPassword,
-        true
-    ).then(() => {
-        logger.info("installer", `Admin user created with username: admin and password: ${generatedPassword}`);
-    });
+    logger.info("core", "Bootstrapping application");
+
+    const userService = UserService.getInstance();
+    const randomPassword = generateRandomString(16);
+    await userService.createUser({
+        email: "admin@system.local",
+        password: randomPassword,
+        first_name: "Admin",
+        last_name: "User",
+    }).then(() => {
+        logger.info("core", `Created admin user with email: admin@system.local and password: ${randomPassword}`);
+    })
 }
 

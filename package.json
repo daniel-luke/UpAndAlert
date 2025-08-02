@@ -14,14 +14,18 @@
   "dependencies": {
     "@nuxt/eslint": "^1.7.1",
     "@nuxt/ui": "^3.3.0",
+    "@nuxtjs/i18n": "^10.0.3",
+    "@pinia/nuxt": "^0.11.2",
     "bcryptjs": "^3.0.2",
     "eslint": "^9.32.0",
-    "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "nuxt": "^4.0.1",
+    "nuxt-auth-utils": "^0.5.22",
+    "pinia": "^3.0.3",
     "sqlite3": "^5.1.7",
     "vue": "^3.5.18",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "zod": "^4.0.14"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10"
