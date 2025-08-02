@@ -1,6 +1,5 @@
-// server/services/UserService.ts
 import { UserRepository } from "~~/server/modules/auth/repositories/UserRepository";
-import { User } from "~~/server/modules/auth/interfaces/User";
+import { User } from "~~/server/modules/auth/models/User";
 import bcrypt from "bcryptjs";
 
 /**

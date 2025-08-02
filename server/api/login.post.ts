@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { UserService } from "~~/server/modules/auth/services/UserService";
-import type { User } from "~~/server/modules/auth/interfaces/User";
+import type { User } from "~~/server/modules/auth/models/User";
 
 const bodySchema = z.object({
     email: z.email(),

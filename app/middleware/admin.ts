@@ -1,4 +1,4 @@
-import type {User as IUser} from "~~/server/modules/auth/interfaces/User";
+import type {User as IUser} from "~~/server/modules/auth/models/User";
 
 /**
  * @name admin
