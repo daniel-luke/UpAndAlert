@@ -1,3 +1,9 @@
+/**
+ * @name User
+ * @description User model
+ * @since 1.0.0
+ * @author Daniel Groothuis
+ */
 export interface User {
     id: number;
     email: string;

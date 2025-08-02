@@ -1,5 +1,11 @@
 import type {User as IUser} from "~~/server/modules/auth/interfaces/User";
 
+/**
+ * @name admin
+ * @description Middleware to check if the user is an admin
+ * @since 1.0.0
+ * @author Daniel Groothuis
+ */
 export default defineNuxtRouteMiddleware(() => {
     const { user } = useUserSession()
     const typedUser = user as Ref<IUser | null>;

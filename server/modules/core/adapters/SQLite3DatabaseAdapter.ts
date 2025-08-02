@@ -5,7 +5,10 @@ import {Logger} from "~~/server/utils/Logger";
 const logger = Logger.getInstance();
 
 /**
- * SQLite3 database adapter
+ * @name SQLite3DatabaseAdapter
+ * @description This class is responsible for connecting to the SQLite3 database
+ * @since 1.0.0
+ * @author Daniel Groothuis
  */
 export class SQLite3DatabaseAdapter extends DatabaseAdapter {
     private static _instance: SQLite3DatabaseAdapter | null = null;

@@ -1,3 +1,9 @@
+/**
+ * @name DatabaseAdapter
+ * @description Abstract class for database adapters
+ * @since 1.0.0
+ * @author Daniel Groothuis
+ */
 export abstract class DatabaseAdapter {
 
     protected constructor() {}
