@@ -1,11 +1,5 @@
 <script setup lang="ts">
-const localePath = useLocalePath()
-const { clear: clearSession } = useUserSession()
-
-async function logout() {
-    await clearSession()
-    await navigateTo(localePath('/login'))
-}
+import { logout } from '~/utils/global'
 </script>
 
 <template>

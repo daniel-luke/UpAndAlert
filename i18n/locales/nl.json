@@ -10,5 +10,8 @@
     "edit.profile": "Profiel bewerken",
     "switch.theme": "Thema wisselen",
     "dashboard.title": "Dashboard",
-    "toggle.menu": "Menu tonen/verbergen"
+    "toggle.menu": "Menu tonen/verbergen",
+    "switch.language": "Taal wisselen",
+    "select.language": "Selecteer uw taal",
+    "dashboard": "Dashboard"
 }
