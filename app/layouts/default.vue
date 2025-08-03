@@ -5,13 +5,7 @@ import LogoutButton from '~/components/LogoutButton.vue'
 import ProfileMenuButton from '~/components/ProfileMenuButton.vue'
 import { useWindowSize } from '@vueuse/core'
 
-const route = useRoute()
-const title = route.meta.title as string
 const { width } = useWindowSize()
-
-useHead({
-    title: title.concat(' - ', $t('app.name'))
-})
 </script>
 
 <template>
@@ -21,7 +15,7 @@ useHead({
             <div
                 class="flex flex-row align-center gap-4 justify-between pb-2 mb-2 border-b border-gray-200 dark:border-gray-800"
             >
-                <span class="text-2xl font-bold">{{ title }}</span>
+                <span class="text-2xl font-bold"><slot name="title" /></span>
                 <div class="flex flex-row gap-2 align-center">
                     <profile-menu-button />
                     <span v-if="width > 768"><theme-switcher /></span>
