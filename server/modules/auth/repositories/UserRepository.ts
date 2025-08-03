@@ -1,5 +1,5 @@
-import { Knex } from 'knex';
-import { User } from "~~/server/modules/auth/models/User";
+import type { Knex } from 'knex';
+import type { User } from "~~/server/modules/auth/models/User";
 import { DatabaseService } from "~~/server/modules/core/services/DatabaseService"; // Your Knex adapter
 
 /**

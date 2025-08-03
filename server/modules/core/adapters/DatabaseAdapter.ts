@@ -1,3 +1,5 @@
+import type {Knex} from "knex";
+
 /**
  * @name DatabaseAdapter
  * @description Abstract class for database adapters
@@ -10,6 +12,6 @@ export abstract class DatabaseAdapter {
 
     public abstract connect(): Promise<void>;
     public abstract migrate(): Promise<void>;
-    public abstract getKnex(): any;
+    public abstract getKnex(): Knex;
     public abstract close(): Promise<void>;
 }

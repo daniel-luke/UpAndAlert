@@ -1,5 +1,6 @@
 import {SQLite3DatabaseAdapter} from "~~/server/modules/core/adapters/SQLite3DatabaseAdapter";
 import {Logger} from "~~/server/utils/Logger";
+import type {DatabaseAdapter} from "~~/server/modules/core/adapters/DatabaseAdapter";
 
 /**
  * @name DatabaseService
@@ -9,7 +10,7 @@ import {Logger} from "~~/server/utils/Logger";
  */
 export class DatabaseService {
     private static _instance: DatabaseService;
-    private adapter: any;
+    private adapter: DatabaseAdapter;
 
     /**
      * @name constructor
@@ -46,7 +47,7 @@ export class DatabaseService {
      * @description Get adapter for database operations
      * @returns {any}
      */
-    public getAdapter(): any {
+    public getAdapter(): DatabaseAdapter {
         return this.adapter;
     }
 }

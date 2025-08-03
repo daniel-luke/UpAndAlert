@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {z} from "zod";
 const switchLocalePath = useSwitchLocalePath()
-const {loggedIn, user, fetch: refreshSession} = useUserSession()
+const {loggedIn, fetch: refreshSession} = useUserSession()
 const localePath = useLocalePath()
 
 if (loggedIn.value) {
@@ -45,7 +45,7 @@ async function login() {
       <template #header>
         <h2 class="text-2xl font-bold text-center">{{ $t('login.title') }}</h2>
       </template>
-      <UForm @submit.prevent="login" :schema="schema" :state="credentials" class="space-y-6">
+      <UForm :schema="schema" :state="credentials" class="space-y-6" @submit.prevent="login">
         <div class="flex flex-col space-y-4">
           <div>
             <label for="email" class="block mb-1 text-s font-medium text-gray-700 dark:text-gray-200">{{$t('login.email')}}</label>
@@ -62,8 +62,9 @@ async function login() {
 
           <div>
 
-            <label for="password"
-                   class="block mb-1 text-m font-medium text-gray-700 dark:text-gray-200">{{ $t('login.password') }}</label>
+            <label
+                for="password"
+                class="block mb-1 text-m font-medium text-gray-700 dark:text-gray-200">{{ $t('login.password') }}</label>
             <UInput
                 id="password"
                 v-model="credentials.password"

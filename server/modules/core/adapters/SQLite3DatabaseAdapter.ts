@@ -1,5 +1,6 @@
 import {DatabaseAdapter} from "~~/server/modules/core/adapters/DatabaseAdapter";
-import knex, {Knex} from "knex";
+import knex from "knex";
+import type {Knex} from "knex";
 import {Logger} from "~~/server/utils/Logger";
 
 const logger = Logger.getInstance();
@@ -74,9 +75,9 @@ export class SQLite3DatabaseAdapter extends DatabaseAdapter {
 
     /**
      * Get the Knex instance
-     * @returns {any} The Knex instance
+     * @returns {Knex} The Knex instance
      */
-    getKnex(): any {
+    getKnex(): Knex {
         if (!this.db) {
             throw new Error("Database not connected");
         }

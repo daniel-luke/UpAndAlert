@@ -1,5 +1,5 @@
 import { UserRepository } from "~~/server/modules/auth/repositories/UserRepository";
-import { User } from "~~/server/modules/auth/models/User";
+import type { User } from "~~/server/modules/auth/models/User";
 import bcrypt from "bcryptjs";
 
 /**
@@ -83,7 +83,7 @@ export class UserService {
      */
     async updateUser(id: number, updates: Partial<Omit<User, 'id' | 'password_hash'>> & { password?: string }): Promise<User | undefined> {
         const { password, ...rest } = updates;
-        let updateData: Partial<Omit<User, 'id'>> = { ...rest };
+        const updateData: Partial<Omit<User, 'id'>> = { ...rest };
         if (password) {
             updateData.password_hash = await bcrypt.hash(password, 10);
         }

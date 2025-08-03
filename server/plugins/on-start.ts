@@ -1,5 +1,5 @@
 import {Logger} from "~~/server/utils/Logger";
-import {Knex} from "knex";
+import type {Knex} from "knex";
 import {DatabaseService} from "~~/server/modules/core/services/DatabaseService";
 import {UserService} from "~~/server/modules/auth/services/UserService";
 
@@ -8,10 +8,9 @@ const logger = Logger.getInstance();
 export default defineNitroPlugin(async () => {
 
     logger.info("core", "Starting up application");
-    let db: Knex | null;
 
     // Connect to DB and perform migrations
-    db = await prepareDatabase();
+    const db: Knex | null = await prepareDatabase();
 
     if (db === null) {
         logger.error("core", "No database connection");
