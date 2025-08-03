@@ -1,6 +1,6 @@
-import { UserRepository } from "~~/server/modules/auth/repositories/UserRepository";
-import type { User } from "~~/server/modules/auth/models/User";
-import bcrypt from "bcryptjs";
+import { UserRepository } from '~~/server/modules/auth/repositories/UserRepository'
+import type { User } from '~~/server/modules/auth/models/User'
+import bcrypt from 'bcryptjs'
 
 /**
  * @name UserService
@@ -9,7 +9,7 @@ import bcrypt from "bcryptjs";
  * @author Daniel Groothuis
  */
 export class UserService {
-    private static instance: UserService;
+    private static instance: UserService
 
     /**
      * @name constructor
@@ -26,9 +26,9 @@ export class UserService {
      */
     static getInstance(): UserService {
         if (!UserService.instance) {
-            UserService.instance = new UserService(UserRepository.getInstance());
+            UserService.instance = new UserService(UserRepository.getInstance())
         }
-        return UserService.instance;
+        return UserService.instance
     }
 
     /**
@@ -38,7 +38,7 @@ export class UserService {
      * @returns {Promise<User | undefined>} A promise that resolves to the user if found, or undefined if not found.
      */
     async getUserById(id: number): Promise<User | undefined> {
-        return this.userRepository.findById(id);
+        return this.userRepository.findById(id)
     }
 
     /**
@@ -48,7 +48,7 @@ export class UserService {
      * @returns {Promise<User | undefined>} A promise that resolves to the user if found, or undefined if not found.
      */
     async getUserByEmail(email: string): Promise<User | undefined> {
-        return this.userRepository.findByEmail(email);
+        return this.userRepository.findByEmail(email)
     }
 
     /**
@@ -58,20 +58,20 @@ export class UserService {
      * @returns {Promise<User>} A promise that resolves to the created user.
      */
     async createUser(data: {
-        email: string;
-        password: string;
-        first_name: string;
-        last_name: string;
-        is_admin?: boolean;
+        email: string
+        password: string
+        first_name: string
+        last_name: string
+        is_admin?: boolean
     }): Promise<User> {
-        const password_hash = await bcrypt.hash(data.password, 10);
+        const password_hash = await bcrypt.hash(data.password, 10)
         return this.userRepository.create({
             email: data.email,
             password_hash,
             first_name: data.first_name,
             last_name: data.last_name,
-            is_admin: !!data.is_admin,
-        });
+            is_admin: !!data.is_admin
+        })
     }
 
     /**
@@ -81,13 +81,16 @@ export class UserService {
      * @param updates - The updates to apply to the user.
      * @returns {Promise<User | undefined>} A promise that resolves to the updated user if found, or undefined if not found.
      */
-    async updateUser(id: number, updates: Partial<Omit<User, 'id' | 'password_hash'>> & { password?: string }): Promise<User | undefined> {
-        const { password, ...rest } = updates;
-        const updateData: Partial<Omit<User, 'id'>> = { ...rest };
+    async updateUser(
+        id: number,
+        updates: Partial<Omit<User, 'id' | 'password_hash'>> & { password?: string }
+    ): Promise<User | undefined> {
+        const { password, ...rest } = updates
+        const updateData: Partial<Omit<User, 'id'>> = { ...rest }
         if (password) {
-            updateData.password_hash = await bcrypt.hash(password, 10);
+            updateData.password_hash = await bcrypt.hash(password, 10)
         }
-        return this.userRepository.update(id, updateData);
+        return this.userRepository.update(id, updateData)
     }
 
     /**
@@ -97,7 +100,7 @@ export class UserService {
      * @returns {Promise<void>} A promise that resolves when the user is deleted.
      */
     async deleteUser(id: number): Promise<void> {
-        await this.userRepository.delete(id);
+        await this.userRepository.delete(id)
     }
 
     /**
@@ -106,7 +109,7 @@ export class UserService {
      * @returns {Promise<User[]>} A promise that resolves to an array of all users.
      */
     async listUsers(): Promise<User[]> {
-        return this.userRepository.all();
+        return this.userRepository.all()
     }
 
     /**
@@ -117,6 +120,6 @@ export class UserService {
      * @returns {Promise<boolean>} A promise that resolves to true if the passwords match, false otherwise.
      */
     async passwordMatches(plainPassword: string, user: User): Promise<boolean> {
-        return bcrypt.compare(plainPassword, user.password_hash);
+        return bcrypt.compare(plainPassword, user.password_hash)
     }
 }

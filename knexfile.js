@@ -5,10 +5,10 @@
  */
 export default {
     migrations: {
-      directory: 'server/utils/migrations'
+        directory: 'server/utils/migrations'
     },
-  client: 'sqlite3',
-  connection: {
-    filename: '.data/db.sqlite3'
-  }
-};
+    client: 'sqlite3',
+    connection: {
+        filename: '.data/db.sqlite3'
+    }
+}

@@ -1,24 +1,22 @@
 <script setup lang="ts">
 definePageMeta({
-  middleware: ['authenticated'],
+    middleware: ['authenticated']
 })
 
 const { user, clear: clearSession } = useUserSession()
 const localePath = useLocalePath()
 
 async function logout() {
-  await clearSession()
-  await navigateTo(localePath('/login'))
+    await clearSession()
+    await navigateTo(localePath('/login'))
 }
 </script>
 
 <template>
-  <div>
-    <h1>{{ $t('homepage.welcome') }} {{ user!.first_name }} {{ user!.last_name }}</h1>
-    <button @click="logout">{{ $t('logout') }}</button>
-  </div>
+    <div>
+        <h1>{{ $t('homepage.welcome') }} {{ user!.first_name }} {{ user!.last_name }}</h1>
+        <button @click="logout">{{ $t('logout') }}</button>
+    </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

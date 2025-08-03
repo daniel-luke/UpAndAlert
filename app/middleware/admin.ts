@@ -1,4 +1,4 @@
-import type {User as IUser} from "~~/server/modules/auth/models/User";
+import type { User as IUser } from '~~/server/modules/auth/models/User'
 
 /**
  * @name admin
@@ -8,7 +8,7 @@ import type {User as IUser} from "~~/server/modules/auth/models/User";
  */
 export default defineNuxtRouteMiddleware(() => {
     const { user } = useUserSession()
-    const typedUser = user as Ref<IUser | null>;
+    const typedUser = user as Ref<IUser | null>
 
     // redirect the user to the login screen if they're not authenticated
     if (!typedUser.value) {
@@ -16,6 +16,6 @@ export default defineNuxtRouteMiddleware(() => {
     }
 
     if (!typedUser.value.is_admin) {
-        return abortNavigation("You don't have permission to access this page");
+        return abortNavigation("You don't have permission to access this page")
     }
 })

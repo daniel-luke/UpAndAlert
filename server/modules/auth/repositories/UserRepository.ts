@@ -1,6 +1,6 @@
-import type { Knex } from 'knex';
-import type { User } from "~~/server/modules/auth/models/User";
-import { DatabaseService } from "~~/server/modules/core/services/DatabaseService"; // Your Knex adapter
+import type { Knex } from 'knex'
+import type { User } from '~~/server/modules/auth/models/User'
+import { DatabaseService } from '~~/server/modules/core/services/DatabaseService' // Your Knex adapter
 
 /**
  * @name UserRepository
@@ -9,19 +9,17 @@ import { DatabaseService } from "~~/server/modules/core/services/DatabaseService
  * @author Daniel Groothuis
  */
 export class UserRepository {
-
     /**
      * @description Singleton instance of the UserRepository
      * @private
      */
-    private static instance: UserRepository;
+    private static instance: UserRepository
 
     /**
      * @description Knex instance for database operations
      * @private
      */
-    private db: Knex = DatabaseService.getInstance().getAdapter().getKnex();
-
+    private db: Knex = DatabaseService.getInstance().getAdapter().getKnex()
 
     private constructor() {}
 
@@ -31,9 +29,9 @@ export class UserRepository {
      */
     static getInstance(): UserRepository {
         if (!UserRepository.instance) {
-            UserRepository.instance = new UserRepository();
+            UserRepository.instance = new UserRepository()
         }
-        return UserRepository.instance;
+        return UserRepository.instance
     }
 
     /**
@@ -42,7 +40,7 @@ export class UserRepository {
      * @returns {Promise<User | undefined>}
      */
     async findById(id: number): Promise<User | undefined> {
-        return this.db<User>('users').where({ id }).first();
+        return this.db<User>('users').where({ id }).first()
     }
 
     /**
@@ -51,7 +49,7 @@ export class UserRepository {
      * @returns {Promise<User | undefined>}
      */
     async findByEmail(email: string): Promise<User | undefined> {
-        return this.db<User>('users').where({ email }).first();
+        return this.db<User>('users').where({ email }).first()
     }
 
     /**
@@ -60,10 +58,8 @@ export class UserRepository {
      * @returns {Promise<User>}
      */
     async create(user: Omit<User, 'id'>): Promise<User> {
-        const [created] = await this.db<User>('users')
-            .insert(user)
-            .returning('*');
-        return created;
+        const [created] = await this.db<User>('users').insert(user).returning('*')
+        return created
     }
 
     /**
@@ -73,11 +69,8 @@ export class UserRepository {
      * @returns {Promise<User | undefined>}
      */
     async update(id: number, updates: Partial<Omit<User, 'id'>>): Promise<User | undefined> {
-        const [updated] = await this.db<User>('users')
-            .where({ id })
-            .update(updates)
-            .returning('*');
-        return updated;
+        const [updated] = await this.db<User>('users').where({ id }).update(updates).returning('*')
+        return updated
     }
 
     /**
@@ -86,7 +79,7 @@ export class UserRepository {
      * @returns {Promise<void>}
      */
     async delete(id: number): Promise<void> {
-        await this.db<User>('users').where({ id }).delete();
+        await this.db<User>('users').where({ id }).delete()
     }
 
     /**
@@ -94,6 +87,6 @@ export class UserRepository {
      * @returns {Promise<User[]>}
      */
     async all(): Promise<User[]> {
-        return this.db<User>('users').select('*');
+        return this.db<User>('users').select('*')
     }
 }

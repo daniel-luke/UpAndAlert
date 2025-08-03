@@ -5,10 +5,9 @@
  * @author Daniel Groothuis
  */
 export class Logger {
-    static instance: Logger;
+    static instance: Logger
 
-    private constructor() {
-    }
+    private constructor() {}
 
     /**
      * @name getInstance
@@ -17,10 +16,10 @@ export class Logger {
      */
     public static getInstance(): Logger {
         if (!Logger.instance) {
-            Logger.instance = new Logger();
+            Logger.instance = new Logger()
         }
 
-        return Logger.instance;
+        return Logger.instance
     }
 
     /**
@@ -30,7 +29,9 @@ export class Logger {
      * @param {string} message The message to log
      */
     public info(module: string, message: string): void {
-        console.info(`[UPANDALERT:${module.toUpperCase()}] (${new Date().toISOString()}) ${message}`);
+        console.info(
+            `[UPANDALERT:${module.toUpperCase()}] (${new Date().toISOString()}) ${message}`
+        )
     }
 
     /**
@@ -40,7 +41,9 @@ export class Logger {
      * @param {string} message The message to log
      */
     public error(module: string, message: string): void {
-        console.error(`[UPANDALERT:${module.toUpperCase()}] (${new Date().toISOString()}) ${message}`);
+        console.error(
+            `[UPANDALERT:${module.toUpperCase()}] (${new Date().toISOString()}) ${message}`
+        )
     }
 
     /**
@@ -50,7 +53,9 @@ export class Logger {
      * @param {string} message The message to log
      */
     public warn(module: string, message: string): void {
-        console.warn(`[UPANDALERT:${module.toUpperCase()}] (${new Date().toISOString()}) ${message}`);
+        console.warn(
+            `[UPANDALERT:${module.toUpperCase()}] (${new Date().toISOString()}) ${message}`
+        )
     }
 
     /**
@@ -60,6 +65,8 @@ export class Logger {
      * @param {string} message The message to log
      */
     public debug(module: string, message: string): void {
-        console.debug(`[UPANDALERT:${module.toUpperCase()}] (${new Date().toISOString()}) ${message}`);
+        console.debug(
+            `[UPANDALERT:${module.toUpperCase()}] (${new Date().toISOString()}) ${message}`
+        )
     }
 }

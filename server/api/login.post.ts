@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { UserService } from "~~/server/modules/auth/services/UserService";
-import type { User } from "~~/server/modules/auth/models/User";
+import { UserService } from '~~/server/modules/auth/services/UserService'
+import type { User } from '~~/server/modules/auth/models/User'
 
 const bodySchema = z.object({
     email: z.email(),
@@ -30,8 +30,8 @@ const bodySchema = z.object({
 export default defineEventHandler(async (event) => {
     const { email, password } = await readValidatedBody(event, bodySchema.parse)
 
-    const userService = UserService.getInstance();
-    const user: User | undefined = await userService.getUserByEmail(email);
+    const userService = UserService.getInstance()
+    const user: User | undefined = await userService.getUserByEmail(email)
     if (user === undefined) {
         throw createError({
             statusCode: 401,
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    const hasValidPassword = await userService.passwordMatches(password, user);
+    const hasValidPassword = await userService.passwordMatches(password, user)
     if (!hasValidPassword) {
         throw createError({
             statusCode: 401,
@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    setResponseStatus(event, 200);
+    setResponseStatus(event, 200)
     await setUserSession(event, {
         user: {
             first_name: user.first_name,

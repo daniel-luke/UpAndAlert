@@ -1,9 +1,9 @@
 {
-  "homepage.welcome": "Welkom",
-  "login.email": "E-mailadres",
-  "login.password": "Wachtwoord",
-  "login.title": "Log in uw account",
-  "login.footer": "Heeft u nog geen account? Neem dan contact op met uw administrator.",
-  "login": "Log in",
-  "logout": "Log uit"
+    "homepage.welcome": "Welkom",
+    "login.email": "E-mailadres",
+    "login.password": "Wachtwoord",
+    "login.title": "Log in uw account",
+    "login.footer": "Heeft u nog geen account? Neem dan contact op met uw administrator.",
+    "login": "Log in",
+    "logout": "Log uit"
 }

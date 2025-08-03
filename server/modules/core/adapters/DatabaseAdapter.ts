@@ -1,4 +1,4 @@
-import type {Knex} from "knex";
+import type { Knex } from 'knex'
 
 /**
  * @name DatabaseAdapter
@@ -7,11 +7,10 @@ import type {Knex} from "knex";
  * @author Daniel Groothuis
  */
 export abstract class DatabaseAdapter {
-
     protected constructor() {}
 
-    public abstract connect(): Promise<void>;
-    public abstract migrate(): Promise<void>;
-    public abstract getKnex(): Knex;
-    public abstract close(): Promise<void>;
+    public abstract connect(): Promise<void>
+    public abstract migrate(): Promise<void>
+    public abstract getKnex(): Knex
+    public abstract close(): Promise<void>
 }
