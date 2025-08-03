@@ -33,6 +33,10 @@ export default defineNitroPlugin(async () => {
     logger.info('core', 'Booting application')
 })
 
+/**
+ * Prepare the database connection and run migrations
+ * @returns {Promise<Knex | null>}
+ */
 async function prepareDatabase(): Promise<Knex | null> {
     const adapter = DatabaseService.getInstance().getAdapter()
     await adapter.connect()
@@ -40,6 +44,10 @@ async function prepareDatabase(): Promise<Knex | null> {
     return adapter.getKnex()
 }
 
+/**
+ * Bootstraps the application
+ * @returns {Promise<void>}
+ */
 async function bootstrap() {
     logger.info('core', 'Bootstrapping application')
 

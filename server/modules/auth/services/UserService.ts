@@ -54,8 +54,13 @@ export class UserService {
 
     /**
      * @name createUser
+     * @param data.email
+     * @param data.password
+     * @param data.first_name
+     * @param data.last_name
+     * @param data
+     * @param data.is_admin
      * @description Creates a new user.
-     * @param data - The user data to create.
      * @returns {Promise<User>} A promise that resolves to the created user.
      */
     async createUser(data: {
