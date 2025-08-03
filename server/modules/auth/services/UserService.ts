@@ -1,6 +1,7 @@
 import { UserRepository } from '~~/server/modules/auth/repositories/UserRepository'
 import type { User } from '~~/server/modules/auth/models/User'
 import bcrypt from 'bcryptjs'
+import type { H3Event } from 'h3'
 
 /**
  * @name UserService
@@ -121,5 +122,10 @@ export class UserService {
      */
     async passwordMatches(plainPassword: string, user: User): Promise<boolean> {
         return bcrypt.compare(plainPassword, user.password_hash)
+    }
+
+    async getUserSession(event: H3Event) {
+        const { user } = await requireUserSession(event)
+        return user as User
     }
 }
