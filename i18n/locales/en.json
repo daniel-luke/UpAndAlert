@@ -1,9 +1,14 @@
 {
+    "app.name": "UpAndAlert",
     "homepage.welcome": "Welcome",
     "login.email": "Email",
     "login.password": "Password",
     "login.title": "Sign in to your account",
     "login.footer": "Don't have an account? Please contact your administrator.",
     "login": "Sign in",
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "edit.profile": "Edit profile",
+    "switch.theme": "Switch theme",
+    "dashboard.title": "Dashboard",
+    "toggle.menu": "Toggle menu"
 }

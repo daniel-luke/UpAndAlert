@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { z } from 'zod'
+
+definePageMeta({
+    layout: 'empty'
+})
+
 const switchLocalePath = useSwitchLocalePath()
 const { loggedIn, fetch: refreshSession } = useUserSession()
 const localePath = useLocalePath()

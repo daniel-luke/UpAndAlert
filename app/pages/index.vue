@@ -1,6 +1,11 @@
 <script setup lang="ts">
 definePageMeta({
-    middleware: ['authenticated']
+    middleware: ['authenticated'],
+    title: 'Dashboard'
+})
+
+useHead({
+    title: $t('dashboard.title').concat(' - ', $t('app.name'))
 })
 
 const { user, clear: clearSession } = useUserSession()
