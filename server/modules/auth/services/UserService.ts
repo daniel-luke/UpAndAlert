@@ -1,6 +1,7 @@
 import { UserRepository } from '~~/server/modules/auth/repositories/UserRepository'
 import type { User } from '~~/server/modules/auth/models/User'
 import bcrypt from 'bcryptjs'
+import type { H3Event } from 'h3'
 
 /**
  * @name UserService
@@ -53,8 +54,13 @@ export class UserService {
 
     /**
      * @name createUser
+     * @param data.email
+     * @param data.password
+     * @param data.first_name
+     * @param data.last_name
+     * @param data
+     * @param data.is_admin
      * @description Creates a new user.
-     * @param data - The user data to create.
      * @returns {Promise<User>} A promise that resolves to the created user.
      */
     async createUser(data: {
@@ -121,5 +127,10 @@ export class UserService {
      */
     async passwordMatches(plainPassword: string, user: User): Promise<boolean> {
         return bcrypt.compare(plainPassword, user.password_hash)
+    }
+
+    async getUserSession(event: H3Event) {
+        const { user } = await requireUserSession(event)
+        return user as User
     }
 }

@@ -1,18 +1,18 @@
 <script setup lang="ts">
 definePageMeta({
     middleware: ['authenticated'],
-    title: 'Dashboard',
+    title: 'Profile',
     layout: false
 })
 
 useHead({
-    title: $t('dashboard').concat(' - ').concat($t('app.name'))
+    title: $t('profile').concat(' - ').concat($t('app.name'))
 })
 </script>
 
 <template>
     <NuxtLayout name="default">
-        <template #title>{{ $t('dashboard') }}</template>
+        <template #title>{{ $t('profile') }}</template>
         <div></div>
     </NuxtLayout>
 </template>

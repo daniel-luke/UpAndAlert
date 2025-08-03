@@ -76,6 +76,7 @@ export class SQLite3DatabaseAdapter extends DatabaseAdapter {
     /**
      * Get the Knex instance
      * @returns {Knex} The Knex instance
+     * @throws {Error} If the database is not connected
      */
     getKnex(): Knex {
         if (!this.db) {

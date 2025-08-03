@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import { z } from 'zod'
+
+definePageMeta({
+    layout: 'empty'
+})
+
+useHead({
+    title: $t('login').concat(' - ').concat($t('app.name'))
+})
+
 const switchLocalePath = useSwitchLocalePath()
 const { loggedIn, fetch: refreshSession } = useUserSession()
 const localePath = useLocalePath()
@@ -97,8 +106,10 @@ async function login() {
                 <p class="text-center text-sm text-gray-700 dark:text-gray-200 mt-4">
                     {{ $t('login.footer') }}
                 </p>
-                <NuxtLink :to="switchLocalePath('en')">English</NuxtLink>
-                <NuxtLink :to="switchLocalePath('nl')">Nederlands</NuxtLink>
+                <div class="flex justify-center mt-2">
+                    <language-switcher />
+                    <theme-switcher />
+                </div>
             </template>
         </UCard>
     </div>
