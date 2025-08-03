@@ -3,6 +3,9 @@
     "homepage.welcome": "Welkom",
     "login.email": "E-mailadres",
     "login.password": "Wachtwoord",
+    "login.first_name": "Voornaam",
+    "login.last_name": "Achternaam",
+    "login.is_admin": "Administrator toegang",
     "login.title": "Log in uw account",
     "login.footer": "Heeft u nog geen account? Neem dan contact op met uw administrator.",
     "login": "Log in",
@@ -14,5 +17,6 @@
     "switch.language": "Taal wisselen",
     "select.language": "Selecteer uw taal",
     "dashboard": "Dashboard",
-    "profile": "Profiel"
+    "profile": "Profiel",
+    "save.changes": "Wijzigingen opslaan"
 }

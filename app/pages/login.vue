@@ -9,7 +9,6 @@ useHead({
     title: $t('login').concat(' - ').concat($t('app.name'))
 })
 
-const switchLocalePath = useSwitchLocalePath()
 const { loggedIn, fetch: refreshSession } = useUserSession()
 const localePath = useLocalePath()
 

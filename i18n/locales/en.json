@@ -3,6 +3,9 @@
     "homepage.welcome": "Welcome",
     "login.email": "Email",
     "login.password": "Password",
+    "login.first_name": "First name",
+    "login.last_name": "Last name",
+    "login.is_admin": "Administrator access",
     "login.title": "Sign in to your account",
     "login.footer": "Don't have an account? Please contact your administrator.",
     "login": "Sign in",
@@ -14,5 +17,6 @@
     "switch.language": "Switch language",
     "select.language": "Choose your language",
     "dashboard": "Dashboard",
-    "profile": "Profile"
+    "profile": "Profile",
+    "save.changes": "Save changes"
 }

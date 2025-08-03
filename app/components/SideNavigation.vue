@@ -4,7 +4,7 @@ import { useWindowSize } from '@vueuse/core'
 
 const localePath = useLocalePath()
 const { width } = useWindowSize()
-const isOpen = ref(false)
+const isOpen = ref()
 
 const toggleMenu = () => {
     isOpen.value = !isOpen.value
@@ -21,6 +21,8 @@ watch(width, () => {
 onMounted(() => {
     if (width.value > 768) {
         isOpen.value = true
+    } else {
+        isOpen.value = false
     }
 })
 

@@ -15,6 +15,21 @@ defineShortcuts({
 
 const groups = computed(() => [
     {
+        id: 'quicklinks',
+        label: searchTerm.value ? `Quicklinks matching “${searchTerm.value}”...` : 'Quicklinks',
+        items: [
+            {
+                id: 'dashboard',
+                icon: 'i-lucide-home',
+                label: $t('dashboard'),
+                onSelect: async () => {
+                    await navigateTo(localePath('/'))
+                    open.value = false
+                }
+            }
+        ]
+    },
+    {
         id: 'actions',
         label: searchTerm.value ? `Actions matching “${searchTerm.value}”...` : 'Actions',
         items: [
@@ -34,6 +49,15 @@ const groups = computed(() => [
                 label: $t('switch.theme'),
                 onSelect: () => {
                     colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+                    open.value = false
+                }
+            },
+            {
+                id: 'edit-profile',
+                icon: 'i-lucide-user',
+                label: $t('edit.profile'),
+                onSelect: () => {
+                    navigateTo(localePath('/profile'))
                     open.value = false
                 }
             }
