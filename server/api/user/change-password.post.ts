@@ -28,9 +28,11 @@ const bodySchema = z.object({
  * }
  */
 export default defineEventHandler(async (event) => {
+    const userService = UserService.getInstance()
+    await userService.isLoggedIn(event)
+
     const { password, new_password } = await readValidatedBody(event, bodySchema.parse)
 
-    const userService = UserService.getInstance()
     const session: User = await userService.getUserSession(event)
     const user = await userService.getUserByEmail(session.email)
     if (!user) {

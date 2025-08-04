@@ -29,11 +29,48 @@ onMounted(() => {
 const items = ref<NavigationMenuItem[][]>([
     [
         {
-            label: 'Dashboard',
+            label: $t('dashboard'),
             icon: 'i-lucide-home',
             to: localePath('/'),
             tooltip: true,
             tooltipText: $t('dashboard')
+        },
+        {
+            label: $t('monitors'),
+            icon: 'i-lucide-monitor',
+            to: localePath('/monitors'),
+            tooltip: true,
+            tooltipText: $t('monitors')
+        }
+    ],
+    [
+        {
+            label: $t('components'),
+            icon: 'i-lucide-component',
+            to: localePath('/components'),
+            tooltip: true,
+            tooltipText: $t('components')
+        },
+        {
+            label: $t('projects'),
+            icon: 'i-lucide-folder',
+            to: localePath('/projects'),
+            tooltip: true,
+            tooltipText: $t('projects')
+        },
+        {
+            label: $t('incidents'),
+            icon: 'i-lucide-alert-triangle',
+            to: localePath('/incidents'),
+            tooltip: true,
+            tooltipText: $t('incidents')
+        },
+        {
+            label: $t('status.pages'),
+            icon: 'i-lucide-file-text',
+            to: localePath('/status-pages'),
+            tooltip: true,
+            tooltipText: $t('status.pages')
         }
     ],
     [

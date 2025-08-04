@@ -32,5 +32,10 @@
     "error": "Error",
     "success": "Success",
     "password.changed.successfully": "Password changed successfully",
-    "profile.changed.successfully": "Profile changed successfully"
+    "profile.changed.successfully": "Profile changed successfully",
+    "monitors": "Monitors",
+    "components": "Components",
+    "incidents": "Incidents",
+    "projects": "Projects",
+    "status.pages": "Status Pages"
 }

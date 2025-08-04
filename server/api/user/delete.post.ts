@@ -27,10 +27,12 @@ const bodySchema = z.object({
  * }
  */
 export default defineEventHandler(async (event) => {
-    const { id } = await readValidatedBody(event, bodySchema.parse)
-
     const userService = UserService.getInstance()
+    await userService.isLoggedIn(event)
+
+    const { id } = await readValidatedBody(event, bodySchema.parse)
     const session: User = await userService.getUserSession(event)
+
     if (!session.is_admin) {
         throw createError({
             statusCode: 403,

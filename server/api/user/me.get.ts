@@ -23,6 +23,8 @@ import type { User } from '~~/server/modules/auth/models/User'
  */
 export default defineEventHandler(async (event) => {
     const userService = UserService.getInstance()
+    await userService.isLoggedIn(event)
+
     const session: User = await userService.getUserSession(event)
     const user = await userService.getUserByEmail(session.email)
     if (!user) {

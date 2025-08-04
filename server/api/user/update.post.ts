@@ -31,13 +31,16 @@ const bodySchema = z.object({
  * }
  */
 export default defineEventHandler(async (event) => {
+    const userService = UserService.getInstance()
+    await userService.isLoggedIn(event)
+
     const { first_name, last_name, email, password, is_admin } = await readValidatedBody(
         event,
         bodySchema.parse
     )
 
-    const userService = UserService.getInstance()
     const session: User = await userService.getUserSession(event)
+
     let user = await userService.getUserByEmail(session.email)
     if (!user) {
         throw createError({

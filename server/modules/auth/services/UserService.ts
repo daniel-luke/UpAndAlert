@@ -129,8 +129,30 @@ export class UserService {
         return bcrypt.compare(plainPassword, user.password_hash)
     }
 
+    /**
+     * @name getUserSession
+     * @description Retrieves the user session from the event.
+     * @param event - The H3Event object.
+     * @returns {Promise<User>} A promise that resolves to the user object from the session.
+     */
     async getUserSession(event: H3Event) {
         const { user } = await requireUserSession(event)
         return user as User
+    }
+
+    /**
+     * @name isLoggedIn
+     * @description Checks if the user is logged in.
+     * @param event - The H3Event object.
+     * @returns {Promise<boolean>} A promise that resolves to true if the user is logged in, false otherwise.
+     */
+    async isLoggedIn(event: H3Event): Promise<void> {
+        const { user } = await requireUserSession(event)
+        if (!user) {
+            throw createError({
+                statusCode: 401,
+                statusMessage: 'Unauthorized'
+            })
+        }
     }
 }

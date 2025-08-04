@@ -29,5 +29,10 @@
     "error.form.passwords.not.match": "Wachtwoorden komen niet overeen",
     "error.form.password.too.short": "Wachtwoord is te kort, minimaal 8 tekens",
     "error": "Fout",
-    "success": "Succes"
+    "success": "Succes",
+    "monitors": "Monitoren",
+    "components": "Componenten",
+    "incidents": "Incidenten",
+    "projects": "Projecten",
+    "status.pages": "Statuspagina's"
 }

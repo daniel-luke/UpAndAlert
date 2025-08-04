@@ -57,15 +57,15 @@ const handleSubmit = () => {
     <UForm :schema="schema" :state="form" class="space-y-6 max-w-md" @submit.prevent="handleSubmit">
         <div class="flex flex-col space-y-4">
             <UFormField :label="$t('current.password')" name="password" required>
-                <UInput v-model="form.password" class="w-full" />
+                <UInput v-model="form.password" class="w-full" type="password" />
             </UFormField>
 
             <UFormField :label="$t('new.password')" name="new_password" required>
-                <UInput v-model="form.new_password" class="w-full" />
+                <UInput v-model="form.new_password" class="w-full" type="password" />
             </UFormField>
 
             <UFormField :label="$t('confirm.password')" name="confirm_password" required>
-                <UInput v-model="form.confirm_password" class="w-full" />
+                <UInput v-model="form.confirm_password" class="w-full" type="password" />
             </UFormField>
         </div>
         <UButton
