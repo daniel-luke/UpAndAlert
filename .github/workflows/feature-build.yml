@@ -1,9 +1,7 @@
 name: Feature build for Production
 on:
-  push:
-    branches:
-      - feature/*
-
+  pull_request: 
+    branches: [ feature/* ]
 jobs:
   check_build:
     name: Check if the project can be built
