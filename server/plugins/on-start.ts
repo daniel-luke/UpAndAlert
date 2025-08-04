@@ -2,6 +2,7 @@ import { Logger } from '~~/server/utils/Logger'
 import type { Knex } from 'knex'
 import { DatabaseService } from '~~/server/modules/core/services/DatabaseService'
 import { UserService } from '~~/server/modules/auth/services/UserService'
+import { MonitorService } from '~~/server/modules/monitoring/services/MonitorService'
 
 const logger = Logger.getInstance()
 
@@ -30,7 +31,7 @@ export default defineNitroPlugin(async () => {
         await bootstrap()
     }
 
-    logger.info('core', 'Booting application')
+    await startMonitors()
 })
 
 /**
@@ -66,4 +67,14 @@ async function bootstrap() {
                 `Created admin user with email: admin@system.local and password: ${randomPassword}`
             )
         })
+}
+
+async function startMonitors() {
+    logger.info('mon', 'Starting monitors')
+    const monitorService = MonitorService.getInstance()
+    const monitors = await monitorService.listMonitors()
+    logger.info('mon', `Found ${monitors.length} monitors to initialize`)
+    monitors.forEach((monitor) => {
+        monitorService.startMonitor(monitor)
+    })
 }
