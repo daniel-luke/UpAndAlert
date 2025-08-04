@@ -47,7 +47,7 @@ async function login() {
 
 <template>
     <div
-        class="flex flex-col gap-6 min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900"
+        class="flex flex-col gap-6 min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-950"
     >
         <UIcon name="i-heroicons-lock-closed" class="h-12 w-12 text-indigo-600" />
         <UCard class="w-full max-w-md p-6">

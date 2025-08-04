@@ -10,6 +10,9 @@
     "login.footer": "Heeft u nog geen account? Neem dan contact op met uw administrator.",
     "login": "Log in",
     "logout": "Log uit",
+    "current.password": "Huidig wachtwoord",
+    "new.password": "Nieuw wachtwoord",
+    "confirm.password": "Bevestig nieuw wachtwoord",
     "edit.profile": "Profiel bewerken",
     "switch.theme": "Thema wisselen",
     "dashboard.title": "Dashboard",
@@ -18,5 +21,13 @@
     "select.language": "Selecteer uw taal",
     "dashboard": "Dashboard",
     "profile": "Profiel",
-    "save.changes": "Wijzigingen opslaan"
+    "save.changes": "Wijzigingen opslaan",
+    "save.password": "Wachtwoord opslaan",
+    "change.password": "Wachtwoord wijzigen",
+    "error.form.cannot.be.empty": "Het veld mag niet leeg zijn.",
+    "error.form.email.invalid": "E-mailadres is ongeldig",
+    "error.form.passwords.not.match": "Wachtwoorden komen niet overeen",
+    "error.form.password.too.short": "Wachtwoord is te kort, minimaal 8 tekens",
+    "error": "Fout",
+    "success": "Succes"
 }
