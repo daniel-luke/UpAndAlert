@@ -1,0 +1,19 @@
+on:
+  push:
+    branches:
+      - feature/*
+
+jobs:
+  check_build:
+    name: Check if the project can be built
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+      - name: Install Dependencies
+        run: npm install
+      - name: Run production build
+        run: npm run build
