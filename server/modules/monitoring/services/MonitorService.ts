@@ -1,7 +1,7 @@
 import type { Monitor } from '~~/server/modules/monitoring/models/Monitor'
 import { MonitorRepository } from '~~/server/modules/monitoring/repositories/MonitorRepository'
 import { HttpMonitor } from '~~/server/modules/monitoring/models/HttpMonitor'
-import { Status } from '~~/server/modules/monitoring/types/Status'
+import type { Status } from '~~/server/modules/monitoring/types/Status'
 
 /**
  * @name UserService
@@ -12,7 +12,7 @@ import { Status } from '~~/server/modules/monitoring/types/Status'
 export class MonitorService {
     private static instance: MonitorService
 
-    private activeMonitorJobs: any[]
+    private activeMonitorJobs: unknown[]
 
     /**
      * @name constructor
@@ -110,11 +110,12 @@ export class MonitorService {
 
     async startMonitor(monitor: Monitor) {
         switch (monitor.monitor_type) {
-            case 'http':
+            case 'http': {
                 const httpMonitor = new HttpMonitor(monitor)
                 httpMonitor.startJob()
                 this.activeMonitorJobs.push(httpMonitor)
                 break
+            }
             default:
                 throw new Error('Invalid monitor type')
         }

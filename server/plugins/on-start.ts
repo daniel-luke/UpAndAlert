@@ -69,6 +69,10 @@ async function bootstrap() {
         })
 }
 
+/**
+ * Start all monitors
+ * @returns {Promise<void>}
+ */
 async function startMonitors() {
     logger.info('mon', 'Starting monitors')
     const monitorService = MonitorService.getInstance()

@@ -1,4 +1,4 @@
-import { Status } from '~~/server/modules/monitoring/types/Status'
+import type { Status } from '~~/server/modules/monitoring/types/Status'
 
 /**
  * @name User
