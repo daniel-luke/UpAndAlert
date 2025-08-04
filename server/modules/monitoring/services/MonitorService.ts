@@ -1,6 +1,7 @@
 import type { Monitor } from '~~/server/modules/monitoring/models/Monitor'
 import { MonitorRepository } from '~~/server/modules/monitoring/repositories/MonitorRepository'
 import { HttpMonitor } from '~~/server/modules/monitoring/models/HttpMonitor'
+import { Status } from '~~/server/modules/monitoring/types/Status'
 
 /**
  * @name UserService
@@ -107,15 +108,19 @@ export class MonitorService {
         return this.monitorRepository.all()
     }
 
-    async startMonitor(monitor: Monitor, delay?: number) {
+    async startMonitor(monitor: Monitor) {
         switch (monitor.monitor_type) {
-            case 'http': {
+            case 'http':
                 const httpMonitor = new HttpMonitor(monitor)
                 httpMonitor.startJob()
                 this.activeMonitorJobs.push(httpMonitor)
-
                 break
-            }
+            default:
+                throw new Error('Invalid monitor type')
         }
+    }
+
+    async registerHeartBeat(monitor: Monitor, statusCode: number, status: Status) {
+        return this.monitorRepository.registerHeartbeat(monitor, statusCode, status)
     }
 }

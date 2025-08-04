@@ -4,6 +4,7 @@ export function up(knex) {
         table.integer('monitor_id').unsigned().notNullable()
         table.timestamp('created_at').defaultTo(knex.fn.now())
         table.string('status').notNullable().defaultTo('up')
+        table.integer('status_code').notNullable()
 
         table.foreign('monitor_id').references('id').inTable('monitors')
     })

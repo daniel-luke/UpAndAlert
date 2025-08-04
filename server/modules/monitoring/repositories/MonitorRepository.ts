@@ -1,6 +1,8 @@
 import type { Knex } from 'knex'
 import { DatabaseService } from '~~/server/modules/core/services/DatabaseService'
-import { Monitor } from '~~/server/modules/monitoring/models/Monitor' // Your Knex adapter
+import type { Monitor } from '~~/server/modules/monitoring/models/Monitor'
+import type { Status } from '~~/server/modules/monitoring/types/Status'
+import type { Heartbeat } from '~~/server/modules/monitoring/models/Heartbeat' // Your Knex adapter
 
 /**
  * @name UserRepository
@@ -82,5 +84,20 @@ export class MonitorRepository {
      */
     async all(): Promise<Monitor[]> {
         return this.db<Monitor>('monitors').select('*')
+    }
+
+    async registerHeartbeat(
+        monitor: Monitor,
+        statusCode: number,
+        status: Status
+    ): Promise<Heartbeat> {
+        const [created] = await this.db<Heartbeat>('heartbeats')
+            .insert({
+                monitor_id: monitor.id,
+                status_code: statusCode,
+                status: status
+            })
+            .returning('*')
+        return created
     }
 }
