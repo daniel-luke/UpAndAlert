@@ -24,11 +24,11 @@ function close() {
             >
                 <UButton
                     class="absolute top-4 right-4 text-gray-100 hover:text-gray-300"
-                    @click="close"
                     variant="outline"
                     size="xl"
                     icon="i-heroicons-x-mark-20-solid"
                     aria-label="Close"
+                    @click="close"
                 >
                 </UButton>
                 <slot />
