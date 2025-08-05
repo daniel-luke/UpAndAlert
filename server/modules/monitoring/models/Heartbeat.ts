@@ -1,8 +1,8 @@
 import type { Status } from '~~/server/modules/monitoring/types/Status'
 
 /**
- * @name User
- * @description User model
+ * @name Heartbeat
+ * @description Heartbeat model
  * @since 1.0.0
  * @author Daniel Groothuis
  */

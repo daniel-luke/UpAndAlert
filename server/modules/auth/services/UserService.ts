@@ -1,7 +1,7 @@
 import { UserRepository } from '~~/server/modules/auth/repositories/UserRepository'
-import type { User } from '~~/server/modules/auth/models/User'
 import bcrypt from 'bcryptjs'
 import type { H3Event } from 'h3'
+import type { User } from '#auth-utils'
 
 /**
  * @name UserService
@@ -12,19 +12,8 @@ import type { H3Event } from 'h3'
 export class UserService {
     private static instance: UserService
 
-    /**
-     * @name constructor
-     * @description Private constructor to enforce singleton pattern.
-     * @private
-     * @param userRepository - The repository for user data.
-     */
     private constructor(private userRepository: UserRepository) {}
 
-    /**
-     * @name getInstance
-     * @description Gets the singleton instance of the UserService.
-     * @returns {UserService} The singleton instance of the UserService.
-     */
     static getInstance(): UserService {
         if (!UserService.instance) {
             UserService.instance = new UserService(UserRepository.getInstance())
@@ -32,37 +21,14 @@ export class UserService {
         return UserService.instance
     }
 
-    /**
-     * @name getUserById
-     * @description Retrieves a user by their ID.
-     * @param id - The ID of the user to retrieve.
-     * @returns {Promise<User | undefined>} A promise that resolves to the user if found, or undefined if not found.
-     */
     async getUserById(id: number): Promise<User | undefined> {
         return this.userRepository.findById(id)
     }
 
-    /**
-     * @name getUserByEmail
-     * @description Retrieves a user by their email.
-     * @param email - The email of the user to retrieve.
-     * @returns {Promise<User | undefined>} A promise that resolves to the user if found, or undefined if not found.
-     */
     async getUserByEmail(email: string): Promise<User | undefined> {
         return this.userRepository.findByEmail(email)
     }
 
-    /**
-     * @name createUser
-     * @param data.email
-     * @param data.password
-     * @param data.first_name
-     * @param data.last_name
-     * @param data
-     * @param data.is_admin
-     * @description Creates a new user.
-     * @returns {Promise<User>} A promise that resolves to the created user.
-     */
     async createUser(data: {
         email: string
         password: string
@@ -80,13 +46,6 @@ export class UserService {
         })
     }
 
-    /**
-     * @name updateUser
-     * @description Updates a user's information.
-     * @param id - The ID of the user to update.
-     * @param updates - The updates to apply to the user.
-     * @returns {Promise<User | undefined>} A promise that resolves to the updated user if found, or undefined if not found.
-     */
     async updateUser(
         id: number,
         updates: Partial<Omit<User, 'id' | 'password_hash'>> & { password?: string }
@@ -99,54 +58,24 @@ export class UserService {
         return this.userRepository.update(id, updateData)
     }
 
-    /**
-     * @name deleteUser
-     * @description Deletes a user by their ID.
-     * @param id - The ID of the user to delete.
-     * @returns {Promise<void>} A promise that resolves when the user is deleted.
-     */
     async deleteUser(id: number): Promise<void> {
         await this.userRepository.delete(id)
     }
 
-    /**
-     * @name listUsers
-     * @description Lists all users.
-     * @returns {Promise<User[]>} A promise that resolves to an array of all users.
-     */
     async listUsers(): Promise<User[]> {
         return this.userRepository.all()
     }
 
-    /**
-     * @name passwordMatches
-     * @description Checks if a plain password matches the hashed password of a user.
-     * @param plainPassword - The plain password to check.
-     * @param user - The user object containing the hashed password.
-     * @returns {Promise<boolean>} A promise that resolves to true if the passwords match, false otherwise.
-     */
     async passwordMatches(plainPassword: string, user: User): Promise<boolean> {
         return bcrypt.compare(plainPassword, user.password_hash)
     }
 
-    /**
-     * @name getUserSession
-     * @description Retrieves the user session from the event.
-     * @param event - The H3Event object.
-     * @returns {Promise<User>} A promise that resolves to the user object from the session.
-     */
     async getUserSession(event: H3Event) {
         const { user } = await requireUserSession(event)
-        return user as User
+        return user
     }
 
-    /**
-     * @name isLoggedIn
-     * @description Checks if the user is logged in.
-     * @param event - The H3Event object.
-     * @returns {Promise<boolean>} A promise that resolves to true if the user is logged in, false otherwise.
-     */
-    async isLoggedIn(event: H3Event): Promise<void> {
+    async checkAuthenticated(event: H3Event): Promise<void> {
         const { user } = await requireUserSession(event)
         if (!user) {
             throw createError({

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { UserService } from '~~/server/modules/auth/services/UserService'
-import type { User } from '~~/server/modules/auth/models/User'
+import type { User } from '#auth-utils'
 
 const bodySchema = z.object({
     email: z.email(),
@@ -8,24 +8,10 @@ const bodySchema = z.object({
 })
 
 /**
- * Login a user
- * @route POST /api/login
- * @param {string} email - The email of the user
- * @param {string} password - The password of the user
- * @returns {object} - The user object
- * @throws {Error} - If the user does not exist or the password is invalid
- * @throws {Error} - If body is invalid
- * @example response - 200 - User logged in successfully
- * {
- *  "statusCode": 200,
- *  "message": "Successfully logged in.",
- *  "user": {
- *      "first_name": "John",
- *      "last_name": "Doe",
- *      "email": "john.doe@example.com",
- *      "is_admin": false
- *  }
- * }
+ * @description Logs in a user.
+ * @param {string} email - The email of the user.
+ * @param {string} password - The password of the user.
+ * @returns {Promise<{statusCode: number, message: string, user: User}>} - The status code, message, and user.
  */
 export default defineEventHandler(async (event) => {
     const { email, password } = await readValidatedBody(event, bodySchema.parse)

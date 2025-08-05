@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { useWindowSize } from '@vueuse/core'
+import { useUserSession } from '#imports'
 
 const localePath = useLocalePath()
+const { user } = useUserSession()
 const { width } = useWindowSize()
 const isOpen = ref()
 
@@ -74,6 +76,14 @@ const items = ref<NavigationMenuItem[][]>([
         }
     ],
     [
+        {
+            label: $t('settings'),
+            icon: 'i-lucide-settings',
+            to: localePath('/settings'),
+            tooltip: true,
+            class: user.value!.is_admin ? '' : 'hidden',
+            tooltipText: $t('settings')
+        },
         {
             label: 'GitHub',
             icon: 'i-simple-icons-github',

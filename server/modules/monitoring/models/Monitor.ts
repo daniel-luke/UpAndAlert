@@ -1,6 +1,6 @@
 /**
- * @name User
- * @description User model
+ * @name Monitor
+ * @description Monitor model
  * @since 1.0.0
  * @author Daniel Groothuis
  */

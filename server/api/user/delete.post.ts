@@ -1,34 +1,21 @@
 import { z } from 'zod'
 import { UserService } from '~~/server/modules/auth/services/UserService'
-import type { User } from '~~/server/modules/auth/models/User'
+import type { User } from '#auth-utils'
 
 const bodySchema = z.object({
     id: z.number()
 })
 
 /**
- * Login a user
- * @route POST /api/login
- * @param {string} email - The email of the user
- * @param {string} password - The password of the user
- * @returns {object} - The user object
- * @throws {Error} - If the user does not exist or the password is invalid
- * @throws {Error} - If body is invalid
- * @example response - 200 - User logged in successfully
- * {
- *  "statusCode": 200,
- *  "message": "Successfully logged in.",
- *  "user": {
- *      "first_name": "John",
- *      "last_name": "Doe",
- *      "email": "john.doe@example.com",
- *      "is_admin": false
- *  }
- * }
+ * @description Delete a user by id
+ * @route POST /api/users/delete
+ * @access Private
+ * @param {number} id - The id of the user to delete
+ * @returns {statusCode: number, message: string}
  */
 export default defineEventHandler(async (event) => {
     const userService = UserService.getInstance()
-    await userService.isLoggedIn(event)
+    await userService.checkAuthenticated(event)
 
     const { id } = await readValidatedBody(event, bodySchema.parse)
     const session: User = await userService.getUserSession(event)

@@ -2,6 +2,12 @@ import type { Monitor } from '~~/server/modules/monitoring/models/Monitor'
 import { CronJob } from 'cron'
 import { MonitorService } from '~~/server/modules/monitoring/services/MonitorService'
 
+/**
+ * @name HttpMonitor
+ * @description HttpMonitor model
+ * @since 1.0.0
+ * @author Daniel Groothuis
+ */
 export class HttpMonitor implements Monitor {
     address: string
     id: number

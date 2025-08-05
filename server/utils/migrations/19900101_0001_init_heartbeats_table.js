@@ -1,4 +1,4 @@
-export function up(knex) {
+exports.up = function (knex) {
     return knex.schema.createTable('heartbeats', (table) => {
         table.increments('id').primary()
         table.integer('monitor_id').unsigned().notNullable()
@@ -10,6 +10,6 @@ export function up(knex) {
     })
 }
 
-export function down(knex) {
+exports.down = function (knex) {
     return knex.schema.dropTable('heartbeats')
 }

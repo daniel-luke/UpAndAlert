@@ -14,17 +14,17 @@ function close() {
     <transition name="fade">
         <div
             v-if="modelValue"
-            class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs"
+            class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs bg-black/10 pointer-none"
             @click.self="close"
         >
             <div
-                class="bg-white dark:bg-neutral-800 rounded-lg shadow-md p-6 w-full max-w-md"
+                class="bg-white dark:bg-neutral-800 rounded-lg shadow-xs p-6 w-full max-w-md"
                 role="dialog"
                 aria-modal="true"
             >
                 <UButton
-                    class="absolute top-4 right-4 text-gray-100 hover:text-gray-300"
-                    variant="outline"
+                    class="absolute top-4 right-4 text-neutral dark:text-white"
+                    variant="ghost"
                     size="xl"
                     icon="i-heroicons-x-mark-20-solid"
                     aria-label="Close"

@@ -12,11 +12,6 @@ export class DatabaseService {
     private static _instance: DatabaseService
     private adapter: DatabaseAdapter
 
-    /**
-     * @name constructor
-     * @description Constructor for DatabaseService
-     * @private
-     */
     private constructor() {
         const logger = Logger.getInstance()
 
@@ -30,11 +25,6 @@ export class DatabaseService {
         }
     }
 
-    /**
-     * @name getInstance
-     * @description Get instance of DatabaseService
-     * @returns {DatabaseService}
-     */
     public static getInstance(): DatabaseService {
         if (!DatabaseService._instance) {
             DatabaseService._instance = new DatabaseService()
@@ -42,11 +32,6 @@ export class DatabaseService {
         return DatabaseService._instance
     }
 
-    /**
-     * @name getAdapter
-     * @description Get adapter for database operations
-     * @returns {any}
-     */
     public getAdapter(): DatabaseAdapter {
         return this.adapter
     }
