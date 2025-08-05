@@ -34,5 +34,6 @@
     "components": "Componenten",
     "incidents": "Incidenten",
     "projects": "Projecten",
-    "status.pages": "Statuspagina's"
+  "status.pages": "Statuspagina's",
+  "settings": "Instellingen"
 }

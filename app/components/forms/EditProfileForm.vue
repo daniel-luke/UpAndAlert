@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { z } from 'zod'
-import type { User } from '~~/server/modules/auth/models/User'
+import type { User } from '#auth-utils'
 
 const schema = z.object({
     email: z.email($t('error.form.email.invalid')),
@@ -11,10 +11,13 @@ const schema = z.object({
 
 const loading = ref(false)
 
-const form: Ref<Partial<User>, string> = ref({})
+const form: Ref<Partial<User>> = ref({})
 
 const { data } = await useFetch('/api/user/me')
-if (data.value?.user) form.value = data.value?.user
+if (data.value) form.value = data.value
+if (typeof form.value.is_admin === 'number') {
+    form.value.is_admin = Boolean(form.value.is_admin)
+}
 const { fetch: refreshSession } = useUserSession()
 const handleSubmit = () => {
     $fetch('/api/user/update', {
