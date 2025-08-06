@@ -26,6 +26,15 @@ const groups = computed(() => [
                     await navigateTo(localePath('/'))
                     open.value = false
                 }
+            },
+            {
+                id: 'monitors',
+                icon: 'i-lucide-monitor',
+                label: $t('monitors'),
+                onSelect: async () => {
+                    await navigateTo(localePath('/monitors'))
+                    open.value = false
+                }
             }
         ]
     },

@@ -29,12 +29,9 @@ export class MonitorService {
         return this.monitorRepository.findById(id)
     }
 
-    async createMonitor(data: {
-        name: string
-        monitor_type: string
-        address: string
-        polling_interval: number
-    }): Promise<Monitor> {
+    async createMonitor(
+        data: Omit<Monitor, 'id' | 'in_maintenance' | 'is_active' | 'job' | 'startJob' | 'stopJob'>
+    ): Promise<Monitor> {
         return this.monitorRepository.create({
             name: data.name,
             monitor_type: data.monitor_type,
@@ -68,6 +65,18 @@ export class MonitorService {
             }
             default:
                 throw new Error('Invalid monitor type')
+        }
+    }
+
+    async stopMonitor(monitor: Monitor) {
+        const job = this.activeMonitorJobs.find((job) => {
+            const tempMonitor = job as Monitor
+            return tempMonitor.id === monitor.id
+        })
+
+        const foundMonitor = job as Monitor
+        if (foundMonitor) {
+            foundMonitor.stopJob()
         }
     }
 

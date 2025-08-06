@@ -1,6 +1,7 @@
 import type { Monitor } from '~~/server/modules/monitoring/models/Monitor'
 import { CronJob } from 'cron'
 import { MonitorService } from '~~/server/modules/monitoring/services/MonitorService'
+import { timeToCron } from '@aquarela/time-to-cron'
 
 /**
  * @name HttpMonitor
@@ -50,7 +51,13 @@ export class HttpMonitor implements Monitor {
                 })
         }
 
-        const job = new CronJob(`*/5 * * * * *`, cb, null, true)
+        const exp = timeToCron(this.polling_interval)
+        const job = new CronJob(exp, cb, null, true)
         this.job = job
+    }
+
+    public stopJob() {
+        if (this.job) this.job.stop()
+        this.job = null
     }
 }

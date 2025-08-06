@@ -35,5 +35,6 @@
     "incidents": "Incidenten",
     "projects": "Projecten",
   "status.pages": "Statuspagina's",
-  "settings": "Instellingen"
+    "settings": "Instellingen",
+    "new.monitor": "Nieuwe monitor"
 }

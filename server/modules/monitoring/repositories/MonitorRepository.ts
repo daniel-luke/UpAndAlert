@@ -28,7 +28,12 @@ export class MonitorRepository {
         return this.db<Monitor>('monitors').where({ id }).first()
     }
 
-    async create(monitor: Omit<Monitor, 'id' | 'in_maintenance' | 'is_active'>): Promise<Monitor> {
+    async create(
+        monitor: Omit<
+            Monitor,
+            'id' | 'in_maintenance' | 'is_active' | 'job' | 'startJob' | 'stopJob'
+        >
+    ): Promise<Monitor> {
         const [created] = await this.db<Monitor>('monitors').insert(monitor).returning('*')
         return created
     }

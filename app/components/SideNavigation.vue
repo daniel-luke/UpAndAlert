@@ -2,6 +2,9 @@
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { useWindowSize } from '@vueuse/core'
 import { useUserSession } from '#imports'
+import LogoutButton from '~/components/LogoutButton.vue'
+import ProfileMenuButton from '~/components/ProfileMenuButton.vue'
+import ThemeSwitcher from '~/components/ThemeSwitcher.vue'
 
 const localePath = useLocalePath()
 const { user } = useUserSession()
@@ -28,6 +31,8 @@ onMounted(() => {
     }
 })
 
+const { data: monitorCount } = await useFetch('/api/monitor/count')
+
 const items = ref<NavigationMenuItem[][]>([
     [
         {
@@ -42,6 +47,7 @@ const items = ref<NavigationMenuItem[][]>([
             icon: 'i-lucide-monitor',
             to: localePath('/monitors'),
             tooltip: true,
+            badge: monitorCount,
             tooltipText: $t('monitors')
         }
     ],
@@ -100,13 +106,13 @@ const items = ref<NavigationMenuItem[][]>([
     <div
         class="flex flex-col gap-6 justify-between h-screen p-4 border-r border-gray-200 dark:border-gray-800"
     >
-        <div class="flex flex-col gap-6">
+        <div class="flex flex-col gap-6 h-full">
             <div class="flex items-center justify-baseline gap-4 min-h-11">
                 <UTooltip :text="$t('toggle.menu')">
                     <UButton icon="i-lucide-menu" size="lg" variant="outline" @click="toggleMenu" />
                 </UTooltip>
                 <div v-if="isOpen" class="flex flex-col">
-                    <span class="text-lg font-bold">UpAndAlert</span>
+                    <span class="text-md font-bold">Up&Alert</span>
                     <span class="text-xs">1.0.0-alpha</span>
                 </div>
             </div>
@@ -115,8 +121,19 @@ const items = ref<NavigationMenuItem[][]>([
                 orientation="vertical"
                 :items="items"
                 class="data-[orientation=vertical]"
-                :class="isOpen ? 'w-64' : 'pl-1'"
+                :class="isOpen ? '' : 'pl-1'"
             />
+            <div class="flex flex-col h-full justify-end">
+                <div
+                    class="flex gap-2 align-center"
+                    :class="isOpen ? 'flex-row' : 'flex-col-reverse'"
+                >
+                    <span><profile-menu-button /></span>
+                    <span><theme-switcher /></span>
+                    <span><language-switcher /></span>
+                    <span><logout-button /></span>
+                </div>
+            </div>
         </div>
     </div>
 </template>

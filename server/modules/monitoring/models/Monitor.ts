@@ -1,3 +1,5 @@
+import type { CronJob } from 'cron'
+
 /**
  * @name Monitor
  * @description Monitor model
@@ -12,4 +14,9 @@ export interface Monitor {
     polling_interval: number
     in_maintenance: boolean
     is_active: boolean
+    job: CronJob | null
+
+    startJob(): void
+
+    stopJob(): void
 }
