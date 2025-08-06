@@ -79,6 +79,6 @@ async function startMonitors() {
     const monitors = await monitorService.listMonitors()
     logger.info('mon', `Found ${monitors.length} monitors to initialize`)
     monitors.forEach((monitor) => {
-        monitorService.startMonitor(monitor)
+        if (monitor.is_active && !monitor.in_maintenance) monitorService.startMonitor(monitor)
     })
 }

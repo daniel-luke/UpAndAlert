@@ -2,6 +2,7 @@ import type { Monitor } from '~~/server/modules/monitoring/models/Monitor'
 import { MonitorRepository } from '~~/server/modules/monitoring/repositories/MonitorRepository'
 import { HttpMonitor } from '~~/server/modules/monitoring/models/HttpMonitor'
 import type { Status } from '~~/server/modules/monitoring/types/Status'
+import { sendMonitorUpdate } from '~~/server/utils/monitor-clients'
 
 /**
  * @name MonitorService
@@ -81,6 +82,24 @@ export class MonitorService {
     }
 
     async registerHeartBeat(monitor: Monitor, statusCode: number, status: Status) {
-        return this.monitorRepository.registerHeartbeat(monitor, statusCode, status)
+        const heartbeat = await this.monitorRepository.registerHeartbeat(
+            monitor,
+            statusCode,
+            status
+        )
+        sendMonitorUpdate(monitor.id.toString(), {
+            created_at: heartbeat.created_at,
+            status: heartbeat.status,
+            status_code: heartbeat.status_code
+        })
+        return heartbeat
+    }
+
+    async getHeartBeatHistory(monitor: Monitor, limit: number = 100) {
+        return this.monitorRepository.getHeartbeatHistory(monitor, limit)
+    }
+
+    async getLastHeartbeat(monitor: Monitor) {
+        return this.monitorRepository.getLastHeartbeat(monitor)
     }
 }

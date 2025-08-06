@@ -11,5 +11,10 @@ export default defineNuxtConfig({
         ],
         defaultLocale: 'en',
         strategy: 'prefix_except_default'
+    },
+    nitro: {
+        experimental: {
+            websocket: true
+        }
     }
 })

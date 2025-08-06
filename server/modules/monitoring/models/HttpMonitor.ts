@@ -38,7 +38,6 @@ export class HttpMonitor implements Monitor {
             $fetch
                 .raw(this.address)
                 .then((res) => {
-                    console.log(this.address + ' ' + res.status)
                     switch (res.status) {
                         case 200:
                             this.monitorService.registerHeartBeat(this, res.status, 'up')

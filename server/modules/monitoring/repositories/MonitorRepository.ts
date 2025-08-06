@@ -68,4 +68,19 @@ export class MonitorRepository {
             .returning('*')
         return created
     }
+
+    async getHeartbeatHistory(monitor: Monitor, limit: number): Promise<Heartbeat[]> {
+        return this.db<Heartbeat>('heartbeats')
+            .where({ monitor_id: monitor.id })
+            .select('*')
+            .limit(limit)
+    }
+
+    async getLastHeartbeat(monitor: Monitor): Promise<Heartbeat | undefined> {
+        return this.db<Heartbeat>('heartbeats')
+            .where({ monitor_id: monitor.id })
+            .select('*')
+            .orderBy('created_at', 'desc')
+            .first()
+    }
 }
