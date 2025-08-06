@@ -8,6 +8,7 @@ type MonitorCardData = {
     address: string
     polling_interval: number
     in_maintenance: boolean
+    is_active: boolean
 }
 
 const { monitor } = defineProps<{
@@ -20,16 +21,15 @@ const isLoading = ref(true)
 const { data } = useWebSocket(`ws://localhost:3000/ws/heartbeat/${monitor.id}`, {
     autoClose: false,
     autoConnect: false,
-    onMessage: () => {}
-})
-
-onMounted(() => {
-    isLoading.value = false
+    onMessage: () => {},
+    onConnected: () => {
+        isLoading.value = false
+    }
 })
 
 watch(data, (newData) => {
     const beatPacket = JSON.parse(newData)
-    if (beats.value.length > 100) {
+    if (beats.value.length > 28) {
         beats.value.shift()
     }
     beats.value.push(beatPacket)
@@ -41,7 +41,10 @@ const lastStatus = computed(() => {
     } else {
         const length = beats.value.length
         const lastBeat = beats.value[length - 1]
-        return lastBeat ? lastBeat.status : 'unknown'
+        if (lastBeat) {
+            return lastBeat.status === 'up' ? $t('up') : $t('down')
+        }
+        return 'unknown'
     }
 })
 </script>
@@ -62,13 +65,24 @@ const lastStatus = computed(() => {
                 <div class="flex gap-2">
                     <UBadge
                         v-if="!monitor.in_maintenance"
-                        :color="lastStatus === 'up' ? 'success' : 'error'"
+                        :color="lastStatus === $t('up') ? 'success' : 'error'"
                         variant="solid"
                         class="font-bold capitalize"
                         >{{ lastStatus }}
                     </UBadge>
-                    <UBadge v-else color="info" variant="solid" class="font-bold capitalize"
-                        >Maintenance
+                    <UBadge
+                        v-else-if="monitor.in_maintenance && monitor.is_active"
+                        color="info"
+                        variant="solid"
+                        class="font-bold capitalize"
+                        >{{ $t('maintenance') }}
+                    </UBadge>
+                    <UBadge
+                        v-else-if="!monitor.is_active"
+                        color="warning"
+                        variant="solid"
+                        class="font-bold capitalize"
+                        >{{ $t('disabled') }}
                     </UBadge>
                 </div>
             </div>
@@ -76,10 +90,10 @@ const lastStatus = computed(() => {
         <template #footer>
             <div class="flex flex-row gap-1 overflow-x-hidden">
                 <UTooltip
-                    v-for="beat in beats.slice(-100).reverse()"
+                    v-for="beat in beats.slice(-28).reverse()"
                     :key="beat.status"
                     :delay-duration="0"
-                    :text="beat.created_at + ' - ' + (beat.status === 'up' ? 'Up' : 'Down')"
+                    :text="beat.created_at + ' - ' + (beat.status === 'up' ? $t('up') : $t('down'))"
                 >
                     <UBadge
                         variant="solid"

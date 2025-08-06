@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import getUnicodeFlagIcon from 'country-flag-icons/unicode'
-import BaseModal from './BaseModal.vue'
+import BaseModal from '../BaseModal.vue'
 
 const { locale } = useI18n()
 const switchLocalePath = useSwitchLocalePath()

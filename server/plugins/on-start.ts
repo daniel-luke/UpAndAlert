@@ -7,6 +7,17 @@ import { MonitorService } from '~~/server/modules/monitoring/services/MonitorSer
 const logger = Logger.getInstance()
 
 export default defineNitroPlugin(async () => {
+    process.on('unhandledRejection', (reason: any) => {
+        // Optionally filter out EPIPE errors
+        if (reason && (reason.code === 'EPIPE' || reason.code === 'ECONNRESET')) {
+            // Ignore or log as needed
+            return
+        }
+        // Log other unhandled rejections
+        console.error('Unhandled Rejection:', reason)
+    })
+
+    // Startup message
     logger.info('core', 'Starting up application')
 
     // Connect to DB and perform migrations

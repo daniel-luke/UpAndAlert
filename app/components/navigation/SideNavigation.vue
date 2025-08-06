@@ -2,8 +2,8 @@
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { useWindowSize } from '@vueuse/core'
 import { useUserSession } from '#imports'
-import LogoutButton from '~/components/LogoutButton.vue'
-import ProfileMenuButton from '~/components/ProfileMenuButton.vue'
+import LogoutButton from '~/components/navigation/LogoutButton.vue'
+import ProfileMenuButton from '~/components/navigation/ProfileMenuButton.vue'
 import ThemeSwitcher from '~/components/ThemeSwitcher.vue'
 
 const localePath = useLocalePath()
@@ -112,7 +112,7 @@ const items = ref<NavigationMenuItem[][]>([
                     <UButton icon="i-lucide-menu" size="lg" variant="outline" @click="toggleMenu" />
                 </UTooltip>
                 <div v-if="isOpen" class="flex flex-col">
-                    <span class="text-md font-bold">Up&Alert</span>
+                    <span class="text-md font-bold">{{ $t('app.name') }}</span>
                     <span class="text-xs">1.0.0-alpha</span>
                 </div>
             </div>

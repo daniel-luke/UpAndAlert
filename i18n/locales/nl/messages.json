@@ -1,5 +1,5 @@
 {
-    "app.name": "UpAndAlert",
+    "app.name": "PulseWatch",
     "homepage.welcome": "Welkom",
     "login.email": "E-mailadres",
     "login.password": "Wachtwoord",
@@ -36,5 +36,9 @@
     "projects": "Projecten",
   "status.pages": "Statuspagina's",
     "settings": "Instellingen",
-    "new.monitor": "Nieuwe monitor"
+    "new.monitor": "Nieuwe monitor",
+    "up": "Beschikbaar",
+    "down": "Niet beschikbaar",
+    "maintenance": "Onderhoud",
+    "disabled": "Uitgeschakeld"
 }

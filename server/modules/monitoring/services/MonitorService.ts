@@ -95,7 +95,7 @@ export class MonitorService {
         return heartbeat
     }
 
-    async getHeartBeatHistory(monitor: Monitor, limit: number = 100) {
+    async getHeartBeatHistory(monitor: Monitor, limit: number = 20) {
         return this.monitorRepository.getHeartbeatHistory(monitor, limit)
     }
 

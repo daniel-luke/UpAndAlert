@@ -1,5 +1,5 @@
 {
-    "app.name": "UpAndAlert",
+    "app.name": "PulseWatch",
     "homepage.welcome": "Welcome",
     "login.email": "Email",
     "login.password": "Password",
@@ -39,5 +39,9 @@
     "projects": "Projects",
     "status.pages": "Status Pages",
     "settings": "Settings",
-    "new.monitor": "New Monitor"
+    "new.monitor": "New Monitor",
+    "up": "Up",
+    "down": "Down",
+    "maintenance": "Maintenance",
+    "disabled": "Disabled"
 }

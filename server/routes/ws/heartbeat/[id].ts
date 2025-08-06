@@ -20,7 +20,7 @@ export default defineWebSocketHandler({
             return
         }
 
-        const history = await monitorService.getHeartBeatHistory(monitor, 50)
+        const history = await monitorService.getHeartBeatHistory(monitor, 28)
 
         for (const heartbeat of history) {
             peer.send(
