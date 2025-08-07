@@ -56,7 +56,8 @@ export class HttpMonitor implements Monitor {
                 })
                 .catch(() => {
                     const end = performance.now()
-                    this.logger.error('HTTP', 'Could not fetch address: ' + this.address)
+                    const responseTime = end - start
+                    this.monitorService.registerHeartBeat(this, 500, 'down', responseTime)
                 })
         }
 

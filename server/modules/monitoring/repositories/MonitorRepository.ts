@@ -55,6 +55,14 @@ export class MonitorRepository {
         return this.db<Monitor>('monitors').select('*')
     }
 
+    async paginate(page: number, pageSize: number): Promise<Monitor[]> {
+        return this.db<Monitor>('monitors')
+            .select('*')
+            .orderBy('id', 'desc')
+            .limit(pageSize)
+            .offset((page - 1) * pageSize)
+    }
+
     async registerHeartbeat(
         monitor: Monitor,
         statusCode: number,

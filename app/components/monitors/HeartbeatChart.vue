@@ -22,20 +22,11 @@ interface AreaChartItem {
 
 const AreaChartData: AreaChartItem[] = props.beats
 
-//const xFormatter = (i: number): string | number => ``
-
 const xFormatter = (tick: number): string => {
     return `${AreaChartData[tick]?.created_at}`
     return `${AreaChartData[tick]?.created_at}`
 }
 
-const yFormatter = (tick: number): string => {
-    return `${AreaChartData[tick]?.response_time}`
-}
-
-onMounted(() => {
-    console.log(AreaChartData)
-})
 </script>
 
 <template>

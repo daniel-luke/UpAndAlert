@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Monitor } from '~/types/Monitor'
+
 const searchTerm = ref('')
 const open = ref(false)
 const localePath = useLocalePath()
@@ -15,9 +17,9 @@ defineShortcuts({
 
 const { data: monitors, status } = await useFetch('/api/monitor/list', {
     key: 'command-palette-monitors',
-    transform: (data: { id: number; name: string; address: string }[]) => {
+    transform: (data: { monitors: Monitor[] }) => {
         return (
-            data?.map((mon) => ({
+            data.monitors?.map((mon) => ({
                 id: mon.id,
                 label: mon.name,
                 suffix: mon.address,
@@ -106,7 +108,7 @@ const groups = computed(() => [
                 v-model:search-term="searchTerm"
                 :loading="status === 'pending'"
                 :groups="groups"
-                placeholder="Search users..."
+                placeholder="Search..."
                 class="h-80"
             />
         </template>

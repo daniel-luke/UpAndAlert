@@ -73,6 +73,10 @@ export class MonitorService {
         return this.monitorRepository.all()
     }
 
+    async paginateMonitors(page: number, limit: number): Promise<Monitor[]> {
+        return this.monitorRepository.paginate(page, limit)
+    }
+
     async startMonitor(monitor: Monitor) {
         switch (monitor.monitor_type) {
             case 'http': {

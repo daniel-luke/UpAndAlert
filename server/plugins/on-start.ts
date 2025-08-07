@@ -43,6 +43,7 @@ export default defineNitroPlugin(async () => {
     }
 
     await startMonitors()
+    await postInstall()
 })
 
 /**
@@ -92,4 +93,18 @@ async function startMonitors() {
     monitors.forEach((monitor) => {
         if (monitor.is_active && !monitor.in_maintenance) monitorService.startMonitor(monitor)
     })
+}
+
+/**
+ *
+ */
+async function postInstall() {
+    // TODO: SMTP is still broken. It looks like it cannot resolve localhost. Need to fix this.
+    // const monitor = await MonitorService.getInstance().getMonitorById(1)
+    // if (!monitor) return
+    //
+    // const ntfy = await NotificationService.getInstance().getNotificationsForMonitor(monitor)
+    // if (ntfy.length !== 1) return
+    //
+    // await SmtpService.getInstance().sendMail(ntfy[0])
 }

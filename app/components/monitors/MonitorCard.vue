@@ -15,9 +15,8 @@ type MonitorCardData = {
     is_active: boolean
 }
 
-const { monitor, renderOpened } = defineProps<{
+const { monitor } = defineProps<{
     monitor: MonitorCardData
-    renderOpened: boolean
 }>()
 
 const beats: Ref<{ status: string; created_at: string; response_time: number }[]> = ref([])
@@ -57,17 +56,12 @@ const lastStatus = computed(() => {
 const openDialog = () => {
     open.value = !open.value
 }
-
-onMounted(() => {
-    if (renderOpened) {
-        openDialog()
-    }
-})
 </script>
 
 <template>
     <UCard
         v-if="!isLoading"
+        as="button"
         variant="soft"
         class="hover:outline-1 hover:cursor-pointer outline-primary/50"
         :class="monitor.in_maintenance ? 'pointer-events-none opacity-50' : ''"
@@ -89,9 +83,11 @@ onMounted(() => {
         </template>
     </UCard>
     <dialog-monitor
+        v-if="!isLoading"
         :open-dialog="open"
         :action="DialogActions.VIEW"
         :monitor="monitor"
         :beats="beats"
     />
+    <USkeleton v-else class="h-32 w-full" />
 </template>
