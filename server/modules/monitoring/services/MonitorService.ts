@@ -98,22 +98,36 @@ export class MonitorService {
         }
     }
 
-    async registerHeartBeat(monitor: Monitor, statusCode: number, status: Status) {
+    async registerHeartBeat(
+        monitor: Monitor,
+        statusCode: number,
+        status: Status,
+        responseTime: number
+    ) {
         const heartbeat = await this.monitorRepository.registerHeartbeat(
             monitor,
             statusCode,
-            status
+            status,
+            responseTime
         )
         sendMonitorUpdate(monitor.id.toString(), {
             created_at: heartbeat.created_at,
             status: heartbeat.status,
-            status_code: heartbeat.status_code
+            status_code: heartbeat.status_code,
+            response_time: heartbeat.response_time
         })
         return heartbeat
     }
 
     async getHeartBeatHistory(monitor: Monitor, limit: number = 20) {
         return this.monitorRepository.getHeartbeatHistory(monitor, limit)
+    }
+
+    async getUptime(monitor: Monitor) {
+        const history = await this.monitorRepository.getHeartbeatHistory(monitor)
+        const total = history.length
+        const up = history.filter((heartbeat) => heartbeat.status === 'up').length
+        return { up: (up / total) * 100, down: ((total - up) / total) * 100 }
     }
 
     async getLastHeartbeat(monitor: Monitor) {

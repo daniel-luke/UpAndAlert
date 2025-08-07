@@ -12,4 +12,5 @@ export interface Heartbeat {
     created_at: Date
     status_code: number
     status: Status
+    response_time: number
 }

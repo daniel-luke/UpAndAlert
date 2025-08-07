@@ -1,22 +1,55 @@
 <script setup lang="ts">
-const data = [{ respTime: 50 }, { respTime: 50 }, { respTime: 50 }, { respTime: 50 }]
+const props = defineProps<{
+    beats: {
+        status: string
+        created_at: string
+        response_time: number
+    }[]
+}>()
 
-const categories = {
-    respTime: {
-        name: 'Resp. Time (ms)',
-        color: '#10b981'
+const categories: Record<string, BulletLegendItemInterface> = {
+    response_time: {
+        name: 'Resp. time (in ms)',
+        color: '#22c55e'
     }
 }
 
-const xFormatter = (i) => data[i].month
+interface AreaChartItem {
+    status: string
+    created_at: string
+    response_time: number
+}
+
+const AreaChartData: AreaChartItem[] = props.beats
+
+//const xFormatter = (i: number): string | number => ``
+
+const xFormatter = (tick: number): string => {
+    return `${AreaChartData[tick]?.created_at}`
+    return `${AreaChartData[tick]?.created_at}`
+}
+
+const yFormatter = (tick: number): string => {
+    return `${AreaChartData[tick]?.response_time}`
+}
+
+onMounted(() => {
+    console.log(AreaChartData)
+})
 </script>
 
 <template>
-    <LineChart
-        :data="data"
-        :categories="categories"
+    <AreaChart
+        class="lg:w-[75%]"
+        :data="AreaChartData"
         :height="150"
-        :xFormatter="xFormatter"
-        xLabel="Month"
+        :categories="categories"
+        :y-grid-line="false"
+        :min-max-ticks-only="true"
+        :y-num-ticks="1"
+        :x-num-ticks="1"
+        :x-formatter="xFormatter"
+        :legend-position="LegendPosition.Bottom"
+        :hide-legend="false"
     />
 </template>

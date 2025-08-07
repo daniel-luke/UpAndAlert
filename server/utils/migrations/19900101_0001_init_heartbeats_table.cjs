@@ -5,6 +5,7 @@ exports.up = function (knex) {
         table.timestamp('created_at').defaultTo(knex.fn.now())
         table.string('status').notNullable().defaultTo('up')
         table.integer('status_code').notNullable()
+        table.integer('response_time').notNullable()
 
         table.foreign('monitor_id').references('id').inTable('monitors')
     })

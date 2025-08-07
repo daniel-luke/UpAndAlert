@@ -20,7 +20,7 @@ const { monitor, renderOpened } = defineProps<{
     renderOpened: boolean
 }>()
 
-const beats: Ref<{ status: string; created_at: string }[]> = ref([])
+const beats: Ref<{ status: string; created_at: string; response_time: number }[]> = ref([])
 const isLoading = ref(true)
 const open = ref(false)
 
@@ -60,7 +60,7 @@ const openDialog = () => {
 
 onMounted(() => {
     if (renderOpened) {
-        open.value = openDialog()
+        openDialog()
     }
 })
 </script>
@@ -88,5 +88,10 @@ onMounted(() => {
             <heartbeat-bar :beats="beats" />
         </template>
     </UCard>
-    <dialog-monitor :open-dialog="open" :action="DialogActions.VIEW" :monitor="monitor" />
+    <dialog-monitor
+        :open-dialog="open"
+        :action="DialogActions.VIEW"
+        :monitor="monitor"
+        :beats="beats"
+    />
 </template>

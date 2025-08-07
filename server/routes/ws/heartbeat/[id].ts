@@ -20,14 +20,15 @@ export default defineWebSocketHandler({
             return
         }
 
-        const history = await monitorService.getHeartBeatHistory(monitor, 28)
+        const history = (await monitorService.getHeartBeatHistory(monitor, 28)).reverse()
 
         for (const heartbeat of history) {
             peer.send(
                 JSON.stringify({
                     created_at: heartbeat.created_at,
                     status: heartbeat.status,
-                    status_code: heartbeat.status_code
+                    status_code: heartbeat.status_code,
+                    response_time: Math.floor(heartbeat.response_time)
                 })
             )
         }

@@ -3,6 +3,7 @@ interface Props {
     beats: {
         status: string
         created_at: string
+        response_time: number
     }[]
 }
 
@@ -15,7 +16,13 @@ const { beats } = defineProps<Props>()
             v-for="beat in beats.slice(-28).reverse()"
             :key="beat.status"
             :delay-duration="0"
-            :text="beat.created_at + ' - ' + (beat.status === 'up' ? $t('up') : $t('down'))"
+            :text="
+                beat.created_at +
+                ' - ' +
+                beat.response_time +
+                'ms - ' +
+                (beat.status === 'up' ? $t('up') : $t('down'))
+            "
         >
             <UBadge
                 variant="solid"

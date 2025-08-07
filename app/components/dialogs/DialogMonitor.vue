@@ -4,6 +4,7 @@ import type { RadioGroupItem } from '#ui/components/RadioGroup.vue'
 import DialogActions from '~/types/dialogAction'
 import type { Monitor } from '~~/server/modules/monitoring/models/Monitor'
 import HeartbeatChart from '~/components/monitors/HeartbeatChart.vue'
+import UptimeChart from '~/components/monitors/UptimeChart.vue'
 
 const open = ref(false)
 
@@ -12,6 +13,11 @@ const { openDialog, action, monitor, openViaButton } = defineProps<{
     openDialog?: boolean
     monitor?: Monitor
     openViaButton?: boolean
+    beats?: {
+        status: string
+        created_at: string
+        response_time: number
+    }[]
 }>()
 
 const finalAction = ref(action)
@@ -218,8 +224,12 @@ function makeFormNonEditable() {
                         "
                         class="col-span-1 md:col-span-2 lg:col-span-3"
                     >
-                        <p class="h-[10dvh]">A graph and other basic info will be shown here!</p>
-                        <HeartbeatChart />
+                        <div
+                            class="grid grid-cols-1 gap-4 md:grid-cols-2 md:max-h-[150px] mb-5 md:mb-20 lg:flex"
+                        >
+                            <heartbeat-chart v-if="beats" :beats="beats" />
+                            <uptime-chart v-if="beats && monitor" :id="monitor.id" :beats="beats" />
+                        </div>
                     </div>
                     <div class="flex flex-col gap-2 flex-1">
                         <h2 class="text-sm font-bold">{{ $t('monitor.general') }}</h2>

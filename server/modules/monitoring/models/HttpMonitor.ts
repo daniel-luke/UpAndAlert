@@ -34,18 +34,28 @@ export class HttpMonitor implements Monitor {
     }
 
     public startJob() {
-        const cb = () => {
-            $fetch
+        const cb = async () => {
+            const start = performance.now()
+            await $fetch
                 .raw(this.address)
                 .then((res) => {
+                    const end = performance.now()
+                    const responseTime = end - start
+
                     switch (res.status) {
                         case 200:
-                            this.monitorService.registerHeartBeat(this, res.status, 'up')
+                            this.monitorService.registerHeartBeat(
+                                this,
+                                res.status,
+                                'up',
+                                responseTime
+                            )
                             return
                     }
-                    this.monitorService.registerHeartBeat(this, res.status, 'down')
+                    this.monitorService.registerHeartBeat(this, res.status, 'down', responseTime)
                 })
                 .catch(() => {
+                    const end = performance.now()
                     this.logger.error('HTTP', 'Could not fetch address: ' + this.address)
                 })
         }

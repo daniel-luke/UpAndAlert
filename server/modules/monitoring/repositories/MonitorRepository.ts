@@ -58,23 +58,32 @@ export class MonitorRepository {
     async registerHeartbeat(
         monitor: Monitor,
         statusCode: number,
-        status: Status
+        status: Status,
+        responseTime: number
     ): Promise<Heartbeat> {
         const [created] = await this.db<Heartbeat>('heartbeats')
             .insert({
                 monitor_id: monitor.id,
                 status_code: statusCode,
-                status: status
+                status: status,
+                response_time: responseTime
             })
             .returning('*')
         return created
     }
 
-    async getHeartbeatHistory(monitor: Monitor, limit: number): Promise<Heartbeat[]> {
+    async getHeartbeatHistory(monitor: Monitor, limit?: number): Promise<Heartbeat[]> {
+        if (limit !== undefined) {
+            return this.db<Heartbeat>('heartbeats')
+                .where({ monitor_id: monitor.id })
+                .select('*')
+                .orderBy('created_at', 'desc')
+                .limit(limit)
+        }
         return this.db<Heartbeat>('heartbeats')
             .where({ monitor_id: monitor.id })
             .select('*')
-            .limit(limit)
+            .orderBy('created_at', 'desc')
     }
 
     async getLastHeartbeat(monitor: Monitor): Promise<Heartbeat | undefined> {
