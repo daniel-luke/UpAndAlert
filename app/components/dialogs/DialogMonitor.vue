@@ -63,6 +63,15 @@ const dialogTitle = computed(() => {
     }
 })
 
+const dialogDescription = computed(() => {
+    switch (action) {
+        case DialogActions.CREATE:
+            return
+        default:
+            return monitor?.address + ' (' + monitor?.monitor_type.toUpperCase() + ')' || ''
+    }
+})
+
 watch(intervalChoice, (value) => {
     state.value.polling_interval =
         value === 'Every minute'
@@ -202,6 +211,7 @@ function makeFormNonEditable() {
         v-model:open="open"
         direction="bottom"
         :title="dialogTitle"
+        :description="dialogDescription"
         should-scale-background
         set-background-color-on-scale
     >

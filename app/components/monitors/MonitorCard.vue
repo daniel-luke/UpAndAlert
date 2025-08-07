@@ -23,7 +23,7 @@ const beats: Ref<{ status: string; created_at: string; response_time: number }[]
 const isLoading = ref(true)
 const open = ref(false)
 
-const { data } = useWebSocket(`ws://localhost:3000/ws/heartbeat/${monitor.id}`, {
+const { data, close } = useWebSocket(`ws://localhost:3000/ws/heartbeat/${monitor.id}`, {
     autoClose: false,
     autoConnect: false,
     onMessage: () => {},
@@ -56,10 +56,14 @@ const lastStatus = computed(() => {
 const openDialog = () => {
     open.value = !open.value
 }
+
+onBeforeUnmount(() => {
+    close()
+})
 </script>
 
 <template>
-    <UCard
+    <LazyUCard
         v-if="!isLoading"
         as="button"
         variant="soft"
@@ -81,7 +85,7 @@ const openDialog = () => {
         <template #footer>
             <heartbeat-bar :beats="beats" />
         </template>
-    </UCard>
+    </LazyUCard>
     <dialog-monitor
         v-if="!isLoading"
         :open-dialog="open"
