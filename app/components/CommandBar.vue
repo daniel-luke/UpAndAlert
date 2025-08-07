@@ -13,6 +13,24 @@ defineShortcuts({
     }
 })
 
+const { data: monitors, status } = await useFetch('/api/monitor/list', {
+    key: 'command-palette-monitors',
+    transform: (data: { id: number; name: string; address: string }[]) => {
+        return (
+            data?.map((mon) => ({
+                id: mon.id,
+                label: mon.name,
+                suffix: mon.address,
+                onSelect: async () => {
+                    await navigateTo(localePath(`/monitors?id=${mon.id}`))
+                    open.value = false
+                }
+            })) || []
+        )
+    },
+    lazy: true
+})
+
 const groups = computed(() => [
     {
         id: 'quicklinks',
@@ -37,6 +55,11 @@ const groups = computed(() => [
                 }
             }
         ]
+    },
+    {
+        id: 'monitors',
+        label: searchTerm.value ? `Monitors matching “${searchTerm.value}”...` : 'Monitors',
+        items: monitors.value || []
     },
     {
         id: 'actions',

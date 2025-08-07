@@ -27,7 +27,7 @@ const handleSubmit = () => {
         })
         return
     }
-    $fetch('/api/user/update', {
+    $fetch('/api/user/change-password', {
         method: 'POST',
         body: {
             password: form.value.password,

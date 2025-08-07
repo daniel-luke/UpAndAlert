@@ -32,6 +32,7 @@ const handleSubmit = () => {
                 icon: 'i-heroicons-check-circle',
                 color: 'success'
             })
+            await refreshNuxtData()
         })
         .catch((error) => {
             useToast().add({

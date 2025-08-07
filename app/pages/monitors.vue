@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import DialogNewMonitor from '~/components/dialogs/DialogNewMonitor.vue'
+import DialogMonitor from '~/components/dialogs/DialogMonitor.vue'
+import DialogActions from '~/types/dialogAction'
+import MonitorList from '~/components/monitors/MonitorList.vue'
 
 definePageMeta({
     middleware: ['authenticated'],
@@ -19,7 +21,7 @@ useHead({
         >
             <h1 class="text-2xl font-bold">{{ $t('monitors') }}</h1>
             <div>
-                <dialog-new-monitor />
+                <dialog-monitor open-via-button :action="DialogActions.CREATE" />
             </div>
         </div>
         <monitor-list />

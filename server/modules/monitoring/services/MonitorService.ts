@@ -45,7 +45,24 @@ export class MonitorService {
         id: number,
         updates: Partial<Omit<Monitor, 'id' | 'in_maintenance' | 'is_active'>>
     ): Promise<Monitor | undefined> {
-        return this.monitorRepository.update(id, updates)
+        const newMonitor = await this.monitorRepository.update(id, updates)
+        if (!newMonitor) {
+            return undefined
+        }
+        const oldMonitor = this.activeMonitorJobs.find((job) => {
+            const tempMonitor = job as Monitor
+            return tempMonitor.id === newMonitor.id
+        }) as Monitor
+        if (!oldMonitor) {
+            return undefined
+        }
+        await this.stopMonitor(oldMonitor)
+        this.activeMonitorJobs = this.activeMonitorJobs.filter((job) => {
+            const tempMonitor = job as Monitor
+            return tempMonitor.id !== newMonitor.id
+        })
+        await this.startMonitor(newMonitor)
+        return newMonitor
     }
 
     async deleteMonitor(id: number): Promise<void> {

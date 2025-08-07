@@ -48,6 +48,7 @@ export class MonitorRepository {
 
     async delete(id: number): Promise<void> {
         await this.db<Monitor>('monitors').where({ id }).delete()
+        await this.db<Heartbeat>('heartbeats').where({ monitor_id: id }).delete()
     }
 
     async all(): Promise<Monitor[]> {

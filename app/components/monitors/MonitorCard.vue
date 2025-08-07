@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { useWebSocket } from '@vueuse/core'
+import DialogActions from '~/types/dialogAction'
+import DialogMonitor from '~/components/dialogs/DialogMonitor.vue'
+import HeartbeatBar from '~/components/monitors/HeartbeatBar.vue'
+import StatusBadge from '~/components/monitors/StatusBadge.vue'
 
 type MonitorCardData = {
     id: number
@@ -11,12 +15,14 @@ type MonitorCardData = {
     is_active: boolean
 }
 
-const { monitor } = defineProps<{
+const { monitor, renderOpened } = defineProps<{
     monitor: MonitorCardData
+    renderOpened: boolean
 }>()
 
 const beats: Ref<{ status: string; created_at: string }[]> = ref([])
 const isLoading = ref(true)
+const open = ref(false)
 
 const { data } = useWebSocket(`ws://localhost:3000/ws/heartbeat/${monitor.id}`, {
     autoClose: false,
@@ -47,6 +53,16 @@ const lastStatus = computed(() => {
         return 'unknown'
     }
 })
+
+const openDialog = () => {
+    open.value = !open.value
+}
+
+onMounted(() => {
+    if (renderOpened) {
+        open.value = openDialog()
+    }
+})
 </script>
 
 <template>
@@ -55,6 +71,7 @@ const lastStatus = computed(() => {
         variant="soft"
         class="hover:outline-1 hover:cursor-pointer outline-primary/50"
         :class="monitor.in_maintenance ? 'pointer-events-none opacity-50' : ''"
+        @click="openDialog"
     >
         <template #header>
             <div class="flex justify-between items-start">
@@ -63,45 +80,13 @@ const lastStatus = computed(() => {
                     <span class="text-xs text-gray-500">{{ monitor.address }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <UBadge
-                        v-if="!monitor.in_maintenance"
-                        :color="lastStatus === $t('up') ? 'success' : 'error'"
-                        variant="solid"
-                        class="font-bold capitalize"
-                        >{{ lastStatus }}
-                    </UBadge>
-                    <UBadge
-                        v-else-if="monitor.in_maintenance && monitor.is_active"
-                        color="info"
-                        variant="solid"
-                        class="font-bold capitalize"
-                        >{{ $t('maintenance') }}
-                    </UBadge>
-                    <UBadge
-                        v-else-if="!monitor.is_active"
-                        color="warning"
-                        variant="solid"
-                        class="font-bold capitalize"
-                        >{{ $t('disabled') }}
-                    </UBadge>
+                    <status-badge :last-status="lastStatus" :monitor="monitor" />
                 </div>
             </div>
         </template>
         <template #footer>
-            <div class="flex flex-row gap-1 overflow-x-hidden">
-                <UTooltip
-                    v-for="beat in beats.slice(-28).reverse()"
-                    :key="beat.status"
-                    :delay-duration="0"
-                    :text="beat.created_at + ' - ' + (beat.status === 'up' ? $t('up') : $t('down'))"
-                >
-                    <UBadge
-                        variant="solid"
-                        class="h-5"
-                        :color="beat.status === 'up' ? 'success' : 'error'"
-                    ></UBadge>
-                </UTooltip>
-            </div>
+            <heartbeat-bar :beats="beats" />
         </template>
     </UCard>
+    <dialog-monitor :open-dialog="open" :action="DialogActions.VIEW" :monitor="monitor" />
 </template>

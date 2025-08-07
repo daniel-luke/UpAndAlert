@@ -40,5 +40,18 @@
     "up": "Beschikbaar",
     "down": "Niet beschikbaar",
     "maintenance": "Onderhoud",
-    "disabled": "Uitgeschakeld"
+  "disabled": "Uitgeschakeld",
+  "save.monitor": "Monitor opslaan",
+  "update.monitor": "Monitor bijwerken",
+  "edit.monitor": "Monitor bewerken",
+  "delete.monitor": "Monitor verwijderen",
+  "view.monitor": "Bewerken annuleren",
+  "monitor.general": "Algemeen",
+  "monitor.specific": "Type Specifiek",
+  "monitor.notifications": "Notificaties",
+  "monitor.field.name": "Monitornaam",
+  "monitor.field.type": "Monitortype",
+  "monitor.field.address": "Adres",
+  "monitor.field.interval": "Pulse interval",
+  "monitor.field.custom.interval": "Aangepaste interval"
 }

@@ -53,6 +53,7 @@ export class HttpMonitor implements Monitor {
         const exp = timeToCron(this.polling_interval)
         const job = new CronJob(exp, cb, null, true)
         this.job = job
+        if (this.job) cb()
     }
 
     public stopJob() {
