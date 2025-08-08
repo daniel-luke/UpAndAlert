@@ -55,12 +55,24 @@ export class MonitorRepository {
         return this.db<Monitor>('monitors').select('*')
     }
 
+    async allActive(): Promise<Monitor[]> {
+        return this.db<Monitor>('monitors').select('*').where({ is_active: true })
+    }
+
     async paginate(page: number, pageSize: number): Promise<Monitor[]> {
         return this.db<Monitor>('monitors')
             .select('*')
             .orderBy('id', 'desc')
             .limit(pageSize)
             .offset((page - 1) * pageSize)
+    }
+
+    async pause(id: number): Promise<void> {
+        return this.db<Monitor>('monitors').where({ id }).update({ is_active: false })
+    }
+
+    async resume(id: number): Promise<void> {
+        return this.db<Monitor>('monitors').where({ id }).update({ is_active: true })
     }
 
     async registerHeartbeat(

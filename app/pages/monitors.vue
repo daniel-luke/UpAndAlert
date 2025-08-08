@@ -2,7 +2,6 @@
 import DialogMonitor from '~/components/dialogs/DialogMonitor.vue'
 import DialogActions from '~/types/dialogAction'
 import MonitorList from '~/components/monitors/MonitorList.vue'
-import type { Monitor } from '~/types/Monitor'
 import { useWindowSize } from '@vueuse/core'
 
 definePageMeta({
@@ -15,33 +14,14 @@ useHead({
     title: $t('monitors').concat(' - ').concat($t('app.name'))
 })
 
-const refreshMonitorApiData = ref(false)
-provide('refreshMonitorApiData', refreshMonitorApiData)
-watch(refreshMonitorApiData, async (newValue) => {
-    if (newValue) {
-        console.log('updating monitor data')
-        isLoading.value = true
-        await useFetch<{ monitors: Monitor[]; total: number }>('/api/monitor/list', {
-            method: 'GET',
-            query: {
-                page: page.value,
-                limit: 12
-            }
-        }).then((res) => {
-            data.value = res.data.value
-        })
-        refreshMonitorApiData.value = false
-        isLoading.value = false
-    }
-})
-
 const isLoading = ref(true)
 const { width } = useWindowSize()
-const page = ref(1)
 
 const monitorStore = useMonitorStore()
-const { monitors } = storeToRefs(monitorStore)
+const { monitors, reloadOverview } = storeToRefs(monitorStore)
 const { fetch } = monitorStore
+
+const page = ref(1)
 
 onBeforeMount(async () => {
     await fetch(page.value)
@@ -54,6 +34,13 @@ onMounted(() => {
 watch(page, async (newPage) => {
     isLoading.value = true
     await fetch(newPage)
+    isLoading.value = false
+})
+
+watch(reloadOverview, async () => {
+    isLoading.value = true
+    await fetch(page.value)
+    reloadOverview.value = false
     isLoading.value = false
 })
 </script>

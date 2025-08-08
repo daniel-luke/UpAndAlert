@@ -23,6 +23,13 @@ const isLoading = ref(true)
 const open = ref(false)
 
 const lastStatus = computed(() => {
+    if (monitor.in_maintenance) {
+        return $t('maintenance')
+    }
+
+    if (!monitor.is_active) {
+        return $t('paused')
+    }
     if (beats === undefined || beats.length === 0) {
         return 'unknown'
     } else {
@@ -54,9 +61,9 @@ onMounted(() => {
     <UCard
         v-if="!isLoading"
         as="button"
-        variant="soft"
+        :variant="monitor.is_active ? 'soft' : 'subtle'"
         class="hover:outline-1 hover:cursor-pointer outline-primary/50"
-        :class="monitor.in_maintenance ? 'pointer-events-none opacity-50' : ''"
+        :class="monitor.in_maintenance || !monitor.is_active ? 'opacity-50' : ''"
         @click="openDialog"
     >
         <template #header>

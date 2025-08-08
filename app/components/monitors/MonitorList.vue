@@ -7,6 +7,9 @@ const props = defineProps<{
     monitorList: Monitor[]
 }>()
 
+const monitorStore = useMonitorStore()
+const { reloadOverview } = storeToRefs(monitorStore)
+
 const websocketData: Ref<
     {
         id: number
@@ -18,7 +21,7 @@ const websocketData: Ref<
         }[]
     }[]
 > = ref([])
-const { send } = useWebSocket('/ws/heartbeat/channel', {
+const ws = useWebSocket('/ws/heartbeat/channel', {
     autoConnect: true,
     autoReconnect: true,
     onConnected: () => {
@@ -27,7 +30,7 @@ const { send } = useWebSocket('/ws/heartbeat/channel', {
             monitorSubList.push(monitor.id)
         })
 
-        send(JSON.stringify({ action: 'subscribe', monitorList: monitorSubList }))
+        ws.send(JSON.stringify({ action: 'subscribe', monitorList: monitorSubList }))
     },
     onMessage: (ws, event) => {
         const message = JSON.parse(event.data)
@@ -48,8 +51,11 @@ const { send } = useWebSocket('/ws/heartbeat/channel', {
 function getIdForWS(monitorId: number) {
     return websocketData.value.findIndex((entry) => entry.id === monitorId)
 }
-</script>
 
+watch(reloadOverview, () => {
+    ws.open()
+})
+</script>
 <template>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
         <monitor-card
