@@ -10,6 +10,7 @@ export default defineNuxtConfig({
         '@pinia/nuxt',
         'nuxt-auth-utils',
         '@nuxtjs/i18n',
+        '@pinia/nuxt',
         'nuxt-charts'
     ],
     css: ['~/assets/css/main.css'],

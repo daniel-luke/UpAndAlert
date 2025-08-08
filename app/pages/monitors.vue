@@ -38,15 +38,13 @@ watch(refreshMonitorApiData, async (newValue) => {
 const isLoading = ref(true)
 const { width } = useWindowSize()
 const page = ref(1)
-const data = ref<{ monitors: Monitor[]; total: number }>()
-await useFetch<{ monitors: Monitor[]; total: number }>('/api/monitor/list', {
-    method: 'GET',
-    query: {
-        page: 1,
-        limit: 12
-    }
-}).then((res) => {
-    data.value = res.data.value
+
+const monitorStore = useMonitorStore()
+const { monitors } = storeToRefs(monitorStore)
+const { fetch } = monitorStore
+
+onBeforeMount(async () => {
+    await fetch(page.value)
 })
 
 onMounted(() => {
@@ -55,15 +53,7 @@ onMounted(() => {
 
 watch(page, async (newPage) => {
     isLoading.value = true
-    await useFetch<{ monitors: Monitor[]; total: number }>('/api/monitor/list', {
-        method: 'GET',
-        query: {
-            page: newPage,
-            limit: 12
-        }
-    }).then((res) => {
-        data.value = res.data.value
-    })
+    await fetch(newPage)
     isLoading.value = false
 })
 </script>
@@ -80,7 +70,7 @@ watch(page, async (newPage) => {
                     v-model:page="page"
                     :items-per-page="12"
                     :sibling-count="1"
-                    :total="data.total"
+                    :total="monitors.total"
                     variant="soft"
                     :show-controls="false"
                     :show-edges="true"
@@ -88,13 +78,13 @@ watch(page, async (newPage) => {
                 <dialog-monitor open-via-button :action="DialogActions.CREATE" />
             </div>
         </div>
-        <div v-if="!isLoading && data">
-            <monitor-list :monitor-list="data.monitors" />
+        <div v-if="!isLoading && monitors.monitors.length > 0">
+            <monitor-list :monitor-list="monitors.monitors" />
             <UPagination
                 v-if="width < 768"
                 v-model:page="page"
                 :items-per-page="12"
-                :total="data.total"
+                :total="monitors.total"
                 variant="soft"
                 :sibling-count="1"
             />

@@ -7,10 +7,11 @@ import HeartbeatChart from '~/components/monitors/HeartbeatChart.vue'
 import UptimeChart from '~/components/monitors/UptimeChart.vue'
 import { useWindowSize } from '@vueuse/core'
 
+const monitorStore = useMonitorStore()
+const { fetch } = monitorStore
+
 const open = ref(false)
 const { width } = useWindowSize()
-const refresh = inject<Ref>('refreshMonitorApiData')
-
 const { openDialog, action, monitor, openViaButton } = defineProps<{
     action: DialogActions
     openDialog?: boolean
@@ -22,7 +23,6 @@ const { openDialog, action, monitor, openViaButton } = defineProps<{
         response_time: number
     }[]
 }>()
-
 const finalAction = ref(action)
 
 watch(
@@ -47,7 +47,7 @@ const state = ref<z.infer<typeof schema>>({
     polling_interval: 60
 })
 
-const intervalChoice = ref()
+const intervalChoice = ref('Every minute')
 const items = ref<RadioGroupItem[]>(['Every minute', 'Every hour', 'Every day', 'Custom'])
 
 const formEditable = ref(false)
@@ -110,15 +110,9 @@ async function create() {
                 icon: 'i-heroicons-check-circle',
                 color: 'success'
             })
-            state.value = {
-                name: '',
-                monitor_type: 'http',
-                address: '',
-                polling_interval: 60
-            }
+            await fetch(1)
+            finalAction.value = DialogActions.VIEW
             open.value = false
-            await refreshNuxtData()
-            refresh!.value = true
         })
         .catch((err) => {
             useToast().add({
@@ -132,12 +126,7 @@ async function create() {
 
 async function unalive() {
     if (!monitor) return
-    $fetch('/api/monitor/delete', {
-        method: 'POST',
-        body: {
-            id: monitor.id
-        }
-    })
+    fetch(1)
         .then(async () => {
             useToast().add({
                 title: 'Monitor deleted',
@@ -145,9 +134,10 @@ async function unalive() {
                 icon: 'i-heroicons-check-circle',
                 color: 'success'
             })
+            await fetch(1)
+            finalAction.value = DialogActions.VIEW
+            makeFormNonEditable()
             open.value = false
-            await refreshNuxtData()
-            refresh!.value = true
         })
         .catch((err) => {
             useToast().add({
@@ -177,10 +167,8 @@ async function update() {
                 color: 'success'
             })
             finalAction.value = DialogActions.VIEW
-            open.value = false
             makeFormNonEditable()
-            await refreshNuxtData()
-            refresh!.value = true
+            await fetch(1)
         })
         .catch((err) => {
             useToast().add({
