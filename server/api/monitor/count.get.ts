@@ -1,5 +1,4 @@
 import { UserService } from '~~/server/modules/auth/services/UserService'
-import type { User } from '#auth-utils'
 import { MonitorService } from '~~/server/modules/monitoring/services/MonitorService'
 
 /**

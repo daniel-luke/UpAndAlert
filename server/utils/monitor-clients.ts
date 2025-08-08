@@ -1,12 +1,13 @@
 // server/utils/monitor-clients.ts
-const monitorClients = new Map<string, Set<any>>() // Set<Peer>
+const monitorClients = new Map<string, Set<{ send: (string: string) => void }>>() // Set<Peer>
 
 /**
  *
  * @param monitorId
  * @param peer
+ * @param peer.send
  */
-export function addMonitorClient(monitorId: string, peer: any) {
+export function addMonitorClient(monitorId: string, peer: { send: (arg0: string) => void }) {
     if (!monitorClients.has(monitorId)) {
         monitorClients.set(monitorId, new Set())
     }
@@ -17,8 +18,9 @@ export function addMonitorClient(monitorId: string, peer: any) {
  *
  * @param monitorId
  * @param peer
+ * @param peer.send
  */
-export function removeMonitorClient(monitorId: string, peer: any) {
+export function removeMonitorClient(monitorId: string, peer: { send: (arg0: string) => void }) {
     monitorClients.get(monitorId)?.delete(peer)
     if (monitorClients.get(monitorId)?.size === 0) {
         monitorClients.delete(monitorId)
@@ -30,10 +32,18 @@ export function removeMonitorClient(monitorId: string, peer: any) {
  * @param monitorId
  * @param data
  */
-export function sendMonitorUpdate(monitorId: string, data: any) {
+export function sendMonitorUpdate(monitorId: string, data: never) {
     const clients = monitorClients.get(monitorId)
     if (!clients) return
     for (const peer of clients) {
-        peer.send(JSON.stringify(data))
+        peer.send(
+            JSON.stringify({
+                action: 'update',
+                data: {
+                    monitorId: monitorId,
+                    heartbeat: data
+                }
+            })
+        )
     }
 }

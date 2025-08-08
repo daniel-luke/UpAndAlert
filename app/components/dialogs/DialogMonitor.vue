@@ -7,9 +7,11 @@ import HeartbeatChart from '~/components/monitors/HeartbeatChart.vue'
 import UptimeChart from '~/components/monitors/UptimeChart.vue'
 import { useWindowSize } from '@vueuse/core'
 
+const monitorStore = useMonitorStore()
+const { fetch } = monitorStore
+
 const open = ref(false)
 const { width } = useWindowSize()
-
 const { openDialog, action, monitor, openViaButton } = defineProps<{
     action: DialogActions
     openDialog?: boolean
@@ -21,7 +23,6 @@ const { openDialog, action, monitor, openViaButton } = defineProps<{
         response_time: number
     }[]
 }>()
-
 const finalAction = ref(action)
 
 watch(
@@ -73,6 +74,7 @@ const dialogDescription = computed(() => {
 })
 
 watch(intervalChoice, (value) => {
+    console.log(value)
     state.value.polling_interval =
         value === 'Every minute'
             ? 60
@@ -83,9 +85,17 @@ watch(intervalChoice, (value) => {
                 : 60
 })
 
-watch(open, async (val) => {
-    if (val) {
+watch(open, async () => {
+    if (open.value) {
         if (action !== DialogActions.CREATE) await getUpdatedMonitor()
+        intervalChoice.value =
+            state.value.polling_interval === 60
+                ? 'Every minute'
+                : state.value.polling_interval === 3600
+                  ? 'Every hour'
+                  : state.value.polling_interval === 86400
+                    ? 'Every day'
+                    : 'Custom'
     }
 })
 async function create() {
@@ -100,14 +110,9 @@ async function create() {
                 icon: 'i-heroicons-check-circle',
                 color: 'success'
             })
-            state.value = {
-                name: '',
-                monitor_type: 'http',
-                address: '',
-                polling_interval: 60
-            }
+            finalAction.value = DialogActions.VIEW
             open.value = false
-            await refreshNuxtData()
+            reloadNuxtApp({ force: true })
         })
         .catch((err) => {
             useToast().add({
@@ -121,12 +126,7 @@ async function create() {
 
 async function unalive() {
     if (!monitor) return
-    $fetch('/api/monitor/delete', {
-        method: 'POST',
-        body: {
-            id: monitor.id
-        }
-    })
+    fetch(1)
         .then(async () => {
             useToast().add({
                 title: 'Monitor deleted',
@@ -134,8 +134,10 @@ async function unalive() {
                 icon: 'i-heroicons-check-circle',
                 color: 'success'
             })
+            await fetch(1)
+            finalAction.value = DialogActions.VIEW
+            makeFormNonEditable()
             open.value = false
-            await refreshNuxtData()
         })
         .catch((err) => {
             useToast().add({
@@ -165,9 +167,8 @@ async function update() {
                 color: 'success'
             })
             finalAction.value = DialogActions.VIEW
-            open.value = false
             makeFormNonEditable()
-            await refreshNuxtData()
+            await fetch(1)
         })
         .catch((err) => {
             useToast().add({
@@ -181,15 +182,14 @@ async function update() {
 
 async function getUpdatedMonitor() {
     if (finalAction.value === DialogActions.EDIT || finalAction.value === DialogActions.VIEW) {
-        await useFetch<Monitor>(`/api/monitor/${monitor?.id}`, {
+        await $fetch<Monitor>(`/api/monitor/${monitor?.id}`, {
             method: 'GET'
         }).then((res) => {
-            if (res.data.value) {
-                console.log(res.data.value)
-                state.value.monitor_type = res.data.value.monitor_type
-                state.value.name = res.data.value.name
-                state.value.address = res.data.value.address
-                state.value.polling_interval = res.data.value.polling_interval
+            if (res) {
+                state.value.monitor_type = res.monitor_type
+                state.value.name = res.name
+                state.value.address = res.address
+                state.value.polling_interval = res.polling_interval
             }
         })
     }
@@ -228,6 +228,69 @@ function makeFormNonEditable() {
             color="success"
             variant="solid"
         />
+        <template #header>
+            <div class="flex w-full justify-between">
+                <div>
+                    <h2 class="text-highlighted font-semibold">{{ dialogTitle }}</h2>
+                    <p class="mt-1 text-muted text-sm">{{ dialogDescription }}</p>
+                </div>
+                <div class="inline-flex flex-row gap-2">
+                    <UButton
+                        v-if="finalAction !== DialogActions.CREATE"
+                        :disabled="formEditable"
+                        type="button"
+                        variant="outline"
+                        class="mb-4 font-bold"
+                        color="info"
+                        icon="i-heroicons-pause"
+                    />
+                    <UButton
+                        v-if="formEditable && finalAction === DialogActions.CREATE"
+                        type="submit"
+                        variant="outline"
+                        class="mb-4 font-bold"
+                        icon="i-heroicons-check"
+                    />
+                    <UButton
+                        v-if="finalAction === DialogActions.EDIT"
+                        type="button"
+                        variant="outline"
+                        class="mb-4 font-bold"
+                        color="info"
+                        icon="i-heroicons-x-mark"
+                        @click.prevent="makeFormNonEditable"
+                    />
+                    <UButton
+                        v-if="formEditable && finalAction === DialogActions.EDIT"
+                        type="button"
+                        variant="outline"
+                        color="success"
+                        class="mb-4 font-bold"
+                        icon="i-heroicons-check"
+                        @click.prevent="update"
+                    />
+
+                    <UButton
+                        v-if="finalAction === DialogActions.VIEW"
+                        type="button"
+                        variant="outline"
+                        class="mb-4 font-bold"
+                        color="warning"
+                        icon="i-heroicons-pencil-square"
+                        @click.prevent="makeFormEditable"
+                    />
+                    <UButton
+                        v-if="finalAction === DialogActions.VIEW"
+                        type="button"
+                        variant="outline"
+                        class="mb-4 font-bold"
+                        color="error"
+                        icon="i-heroicons-trash"
+                        @click.prevent="unalive"
+                    />
+                </div>
+            </div>
+        </template>
         <template #body>
             <LazyUForm
                 :schema="schema"
@@ -317,67 +380,9 @@ function makeFormNonEditable() {
                         >
                     </div>
                     <div class="col-span-1 flex justify-between md:col-span-2 lg:col-span-3">
-                        <div class="inline-flex flex-col md:gap-4 md:flex-row">
-                            <UButton
-                                v-if="formEditable && finalAction === DialogActions.CREATE"
-                                type="submit"
-                                class="mt-4 font-bold"
-                                icon="i-heroicons-check"
-                                >{{ $t('save.monitor') }}
-                            </UButton>
-                            <UButton
-                                v-if="finalAction === DialogActions.EDIT"
-                                type="button"
-                                class="mt-4 font-bold"
-                                color="info"
-                                icon="i-heroicons-x-mark"
-                                @click.prevent="makeFormNonEditable"
-                                >{{ $t('view.monitor') }}
-                            </UButton>
-                            <UButton
-                                v-if="formEditable && finalAction === DialogActions.EDIT"
-                                type="button"
-                                color="success"
-                                class="mt-4 font-bold"
-                                icon="i-heroicons-check"
-                                @click.prevent="update"
-                                >{{ $t('update.monitor') }}
-                            </UButton>
-
-                            <UButton
-                                v-if="finalAction === DialogActions.VIEW"
-                                type="button"
-                                class="mt-4 font-bold"
-                                color="warning"
-                                icon="i-heroicons-pencil-square"
-                                @click.prevent="makeFormEditable"
-                                >{{ $t('edit.monitor') }}
-                            </UButton>
-                            <UButton
-                                v-if="
-                                    finalAction === DialogActions.EDIT ||
-                                    finalAction === DialogActions.VIEW
-                                "
-                                type="button"
-                                class="mt-4 font-bold"
-                                color="error"
-                                icon="i-heroicons-trash"
-                                @click.prevent="unalive"
-                                >{{ $t('delete.monitor') }}
-                            </UButton>
-                        </div>
                         <div
                             class="inline-flex flex-col md:gap-4 md:flex-row md:col-span-2 lg:col-span-3"
-                        >
-                            <UButton
-                                v-if="!formEditable && finalAction === DialogActions.VIEW"
-                                type="button"
-                                class="mt-4 font-bold"
-                                color="info"
-                                icon="i-heroicons-pause"
-                                >{{ $t('pause.monitor') }}
-                            </UButton>
-                        </div>
+                        ></div>
                     </div>
                 </div>
             </LazyUForm>
