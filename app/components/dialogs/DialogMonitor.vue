@@ -9,6 +9,7 @@ import { useWindowSize } from '@vueuse/core'
 
 const open = ref(false)
 const { width } = useWindowSize()
+const refresh = inject<Ref>('refreshMonitorApiData')
 
 const { openDialog, action, monitor, openViaButton } = defineProps<{
     action: DialogActions
@@ -46,7 +47,7 @@ const state = ref<z.infer<typeof schema>>({
     polling_interval: 60
 })
 
-const intervalChoice = ref('Every minute')
+const intervalChoice = ref()
 const items = ref<RadioGroupItem[]>(['Every minute', 'Every hour', 'Every day', 'Custom'])
 
 const formEditable = ref(false)
@@ -73,6 +74,7 @@ const dialogDescription = computed(() => {
 })
 
 watch(intervalChoice, (value) => {
+    console.log(value)
     state.value.polling_interval =
         value === 'Every minute'
             ? 60
@@ -83,9 +85,17 @@ watch(intervalChoice, (value) => {
                 : 60
 })
 
-watch(open, async (val) => {
-    if (val) {
+watch(open, async () => {
+    if (open.value) {
         if (action !== DialogActions.CREATE) await getUpdatedMonitor()
+        intervalChoice.value =
+            state.value.polling_interval === 60
+                ? 'Every minute'
+                : state.value.polling_interval === 3600
+                  ? 'Every hour'
+                  : state.value.polling_interval === 86400
+                    ? 'Every day'
+                    : 'Custom'
     }
 })
 async function create() {
@@ -108,6 +118,7 @@ async function create() {
             }
             open.value = false
             await refreshNuxtData()
+            refresh!.value = true
         })
         .catch((err) => {
             useToast().add({
@@ -136,6 +147,7 @@ async function unalive() {
             })
             open.value = false
             await refreshNuxtData()
+            refresh!.value = true
         })
         .catch((err) => {
             useToast().add({
@@ -168,6 +180,7 @@ async function update() {
             open.value = false
             makeFormNonEditable()
             await refreshNuxtData()
+            refresh!.value = true
         })
         .catch((err) => {
             useToast().add({
@@ -181,15 +194,14 @@ async function update() {
 
 async function getUpdatedMonitor() {
     if (finalAction.value === DialogActions.EDIT || finalAction.value === DialogActions.VIEW) {
-        await useFetch<Monitor>(`/api/monitor/${monitor?.id}`, {
+        await $fetch<Monitor>(`/api/monitor/${monitor?.id}`, {
             method: 'GET'
         }).then((res) => {
-            if (res.data.value) {
-                console.log(res.data.value)
-                state.value.monitor_type = res.data.value.monitor_type
-                state.value.name = res.data.value.name
-                state.value.address = res.data.value.address
-                state.value.polling_interval = res.data.value.polling_interval
+            if (res) {
+                state.value.monitor_type = res.monitor_type
+                state.value.name = res.name
+                state.value.address = res.address
+                state.value.polling_interval = res.polling_interval
             }
         })
     }

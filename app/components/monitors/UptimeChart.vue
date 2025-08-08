@@ -11,7 +11,6 @@ type UptimeResponse = {
     down: number
 }
 const data = await useFetch<UptimeResponse>('/api/monitor/uptime/' + props.id).then((res) => {
-    console.log(res)
     return [
         {
             color: '#f75555',

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useWebSocket } from '@vueuse/core'
 import DialogActions from '~/types/dialogAction'
 import DialogMonitor from '~/components/dialogs/DialogMonitor.vue'
 import HeartbeatBar from '~/components/monitors/HeartbeatBar.vue'
@@ -15,37 +14,20 @@ type MonitorCardData = {
     is_active: boolean
 }
 
-const { monitor } = defineProps<{
+const { monitor, beats } = defineProps<{
     monitor: MonitorCardData
+    beats: { status: string; created_at: string; response_time: number }[] | undefined
 }>()
 
-const beats: Ref<{ status: string; created_at: string; response_time: number }[]> = ref([])
-const isLoading = ref(true)
+const isLoading = ref(false)
 const open = ref(false)
 
-const { data, close } = useWebSocket(`ws://localhost:3000/ws/heartbeat/${monitor.id}`, {
-    autoClose: false,
-    autoConnect: false,
-    onMessage: () => {},
-    onConnected: () => {
-        isLoading.value = false
-    }
-})
-
-watch(data, (newData) => {
-    const beatPacket = JSON.parse(newData)
-    if (beats.value.length > 28) {
-        beats.value.shift()
-    }
-    beats.value.push(beatPacket)
-})
-
 const lastStatus = computed(() => {
-    if (beats.value.length === 0) {
+    if (beats === undefined || beats.length === 0) {
         return 'unknown'
     } else {
-        const length = beats.value.length
-        const lastBeat = beats.value[length - 1]
+        const length = beats.length
+        const lastBeat = beats[length - 1]
         if (lastBeat) {
             return lastBeat.status === 'up' ? $t('up') : $t('down')
         }
@@ -63,7 +45,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <LazyUCard
+    <UCard
         v-if="!isLoading"
         as="button"
         variant="soft"
@@ -85,7 +67,7 @@ onBeforeUnmount(() => {
         <template #footer>
             <heartbeat-bar :beats="beats" />
         </template>
-    </LazyUCard>
+    </UCard>
     <dialog-monitor
         v-if="!isLoading"
         :open-dialog="open"

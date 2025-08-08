@@ -34,6 +34,14 @@ export function sendMonitorUpdate(monitorId: string, data: any) {
     const clients = monitorClients.get(monitorId)
     if (!clients) return
     for (const peer of clients) {
-        peer.send(JSON.stringify(data))
+        peer.send(
+            JSON.stringify({
+                action: 'update',
+                data: {
+                    monitorId: monitorId,
+                    heartbeat: data
+                }
+            })
+        )
     }
 }
