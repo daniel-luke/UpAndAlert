@@ -24,9 +24,7 @@ const AreaChartData: AreaChartItem[] = props.beats
 
 const xFormatter = (tick: number): string => {
     return `${AreaChartData[tick]?.created_at}`
-    return `${AreaChartData[tick]?.created_at}`
 }
-
 </script>
 
 <template>

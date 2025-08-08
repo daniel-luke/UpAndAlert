@@ -19,7 +19,7 @@ const { monitor, beats } = defineProps<{
     beats: { status: string; created_at: string; response_time: number }[] | undefined
 }>()
 
-const isLoading = ref(false)
+const isLoading = ref(true)
 const open = ref(false)
 
 const lastStatus = computed(() => {
@@ -41,6 +41,12 @@ const openDialog = () => {
 
 onBeforeUnmount(() => {
     close()
+})
+
+onMounted(() => {
+    setTimeout(() => {
+        isLoading.value = false
+    }, 100)
 })
 </script>
 
@@ -75,5 +81,5 @@ onBeforeUnmount(() => {
         :monitor="monitor"
         :beats="beats"
     />
-    <USkeleton v-else class="h-32 w-full" />
+    <USkeleton v-else class="h-[113px] w-full" />
 </template>

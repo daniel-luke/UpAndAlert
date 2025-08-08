@@ -12,6 +12,7 @@ export default withNuxt([eslintPluginPrettierRecommended], {
         'jsdoc/require-jsdoc': 'error',
         'jsdoc/require-param': 'error',
         'jsdoc/require-returns': 'error',
-        'jsdoc/require-throws': 'error'
+        'jsdoc/require-throws': 'error',
+        'vue/require-default-prop': 'off'
     }
 })

@@ -110,9 +110,9 @@ async function create() {
                 icon: 'i-heroicons-check-circle',
                 color: 'success'
             })
-            await fetch(1)
             finalAction.value = DialogActions.VIEW
             open.value = false
+            reloadNuxtApp({ force: true })
         })
         .catch((err) => {
             useToast().add({
@@ -228,6 +228,69 @@ function makeFormNonEditable() {
             color="success"
             variant="solid"
         />
+        <template #header>
+            <div class="flex w-full justify-between">
+                <div>
+                    <h2 class="text-highlighted font-semibold">{{ dialogTitle }}</h2>
+                    <p class="mt-1 text-muted text-sm">{{ dialogDescription }}</p>
+                </div>
+                <div class="inline-flex flex-row gap-2">
+                    <UButton
+                        v-if="finalAction !== DialogActions.CREATE"
+                        :disabled="formEditable"
+                        type="button"
+                        variant="outline"
+                        class="mb-4 font-bold"
+                        color="info"
+                        icon="i-heroicons-pause"
+                    />
+                    <UButton
+                        v-if="formEditable && finalAction === DialogActions.CREATE"
+                        type="submit"
+                        variant="outline"
+                        class="mb-4 font-bold"
+                        icon="i-heroicons-check"
+                    />
+                    <UButton
+                        v-if="finalAction === DialogActions.EDIT"
+                        type="button"
+                        variant="outline"
+                        class="mb-4 font-bold"
+                        color="info"
+                        icon="i-heroicons-x-mark"
+                        @click.prevent="makeFormNonEditable"
+                    />
+                    <UButton
+                        v-if="formEditable && finalAction === DialogActions.EDIT"
+                        type="button"
+                        variant="outline"
+                        color="success"
+                        class="mb-4 font-bold"
+                        icon="i-heroicons-check"
+                        @click.prevent="update"
+                    />
+
+                    <UButton
+                        v-if="finalAction === DialogActions.VIEW"
+                        type="button"
+                        variant="outline"
+                        class="mb-4 font-bold"
+                        color="warning"
+                        icon="i-heroicons-pencil-square"
+                        @click.prevent="makeFormEditable"
+                    />
+                    <UButton
+                        v-if="finalAction === DialogActions.VIEW"
+                        type="button"
+                        variant="outline"
+                        class="mb-4 font-bold"
+                        color="error"
+                        icon="i-heroicons-trash"
+                        @click.prevent="unalive"
+                    />
+                </div>
+            </div>
+        </template>
         <template #body>
             <LazyUForm
                 :schema="schema"
@@ -317,67 +380,9 @@ function makeFormNonEditable() {
                         >
                     </div>
                     <div class="col-span-1 flex justify-between md:col-span-2 lg:col-span-3">
-                        <div class="inline-flex flex-col md:gap-4 md:flex-row">
-                            <UButton
-                                v-if="formEditable && finalAction === DialogActions.CREATE"
-                                type="submit"
-                                class="mt-4 font-bold"
-                                icon="i-heroicons-check"
-                                >{{ $t('save.monitor') }}
-                            </UButton>
-                            <UButton
-                                v-if="finalAction === DialogActions.EDIT"
-                                type="button"
-                                class="mt-4 font-bold"
-                                color="info"
-                                icon="i-heroicons-x-mark"
-                                @click.prevent="makeFormNonEditable"
-                                >{{ $t('view.monitor') }}
-                            </UButton>
-                            <UButton
-                                v-if="formEditable && finalAction === DialogActions.EDIT"
-                                type="button"
-                                color="success"
-                                class="mt-4 font-bold"
-                                icon="i-heroicons-check"
-                                @click.prevent="update"
-                                >{{ $t('update.monitor') }}
-                            </UButton>
-
-                            <UButton
-                                v-if="finalAction === DialogActions.VIEW"
-                                type="button"
-                                class="mt-4 font-bold"
-                                color="warning"
-                                icon="i-heroicons-pencil-square"
-                                @click.prevent="makeFormEditable"
-                                >{{ $t('edit.monitor') }}
-                            </UButton>
-                            <UButton
-                                v-if="
-                                    finalAction === DialogActions.EDIT ||
-                                    finalAction === DialogActions.VIEW
-                                "
-                                type="button"
-                                class="mt-4 font-bold"
-                                color="error"
-                                icon="i-heroicons-trash"
-                                @click.prevent="unalive"
-                                >{{ $t('delete.monitor') }}
-                            </UButton>
-                        </div>
                         <div
                             class="inline-flex flex-col md:gap-4 md:flex-row md:col-span-2 lg:col-span-3"
-                        >
-                            <UButton
-                                v-if="!formEditable && finalAction === DialogActions.VIEW"
-                                type="button"
-                                class="mt-4 font-bold"
-                                color="info"
-                                icon="i-heroicons-pause"
-                                >{{ $t('pause.monitor') }}
-                            </UButton>
-                        </div>
+                        ></div>
                     </div>
                 </div>
             </LazyUForm>

@@ -6,7 +6,6 @@ import { useWebSocket } from '@vueuse/core'
 const props = defineProps<{
     monitorList: Monitor[]
 }>()
-const refresh = ref(0)
 
 const websocketData: Ref<
     {
@@ -49,21 +48,13 @@ const { send } = useWebSocket('/ws/heartbeat/channel', {
 function getIdForWS(monitorId: number) {
     return websocketData.value.findIndex((entry) => entry.id === monitorId)
 }
-
-watch(
-    () => props.monitorList,
-    () => {
-        refresh.value++
-    },
-    { deep: true }
-)
 </script>
 
 <template>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
         <monitor-card
             v-for="monitor in monitorList"
-            :key="monitor.id.toString().concat(refresh.toString())"
+            :key="monitor.id.toString()"
             :monitor="monitor"
             :beats="websocketData[getIdForWS(monitor.id)]?.data"
         />

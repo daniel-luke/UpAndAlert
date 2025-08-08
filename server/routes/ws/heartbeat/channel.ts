@@ -22,7 +22,7 @@ export default defineWebSocketHandler({
         let incomingMessage: IncomingMessage
         try {
             incomingMessage = JSON.parse(message.text())
-        } catch (error) {
+        } catch {
             peer.send(JSON.stringify({ error: 'Invalid JSON' }))
             return
         }
@@ -61,8 +61,9 @@ export default defineWebSocketHandler({
  * Subscribes to a list of monitors and sends the data to the client
  * @param msg
  * @param peer
+ * @param peer.send
  */
-async function subscribe(msg: IncomingMessage, peer: any) {
+async function subscribe(msg: IncomingMessage, peer: { send: (arg0: string) => void }) {
     if (!msg.monitorList) {
         peer.send(JSON.stringify({ error: 'Monitor list missing' }))
         return
@@ -107,8 +108,9 @@ async function subscribe(msg: IncomingMessage, peer: any) {
  * Unsubscribes from a list of monitors
  * @param msg
  * @param peer
+ * @param peer.send
  */
-async function unsubscribe(msg: IncomingMessage, peer: any) {
+async function unsubscribe(msg: IncomingMessage, peer: { send: (arg0: string) => void }) {
     if (!msg.monitorList) {
         peer.send(JSON.stringify({ error: 'Monitor list missing' }))
         return

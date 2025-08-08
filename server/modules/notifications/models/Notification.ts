@@ -1,4 +1,4 @@
-import { NotificationType } from '~~/server/modules/notifications/types/NotificationType'
+import type { NotificationType } from '~~/server/modules/notifications/types/NotificationType'
 
 /**
  * @name Notification

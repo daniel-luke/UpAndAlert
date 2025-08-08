@@ -16,22 +16,14 @@ const toggleMenu = () => {
 }
 
 watch(width, () => {
-    if (width.value > 768) {
-        isOpen.value = true
-    } else {
-        isOpen.value = false
-    }
+    isOpen.value = width.value > 768
 })
 
 onMounted(() => {
-    if (width.value > 768) {
-        isOpen.value = true
-    } else {
-        isOpen.value = false
-    }
+    isOpen.value = width.value > 768
 })
 
-const { data: monitorCount } = await useFetch('/api/monitor/count')
+const monitorCount = await $fetch('/api/monitor/count')
 
 const items = ref<NavigationMenuItem[][]>([
     [
