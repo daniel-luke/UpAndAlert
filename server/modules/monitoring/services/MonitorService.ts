@@ -53,15 +53,17 @@ export class MonitorService {
             const tempMonitor = job as Monitor
             return tempMonitor.id === newMonitor.id
         }) as Monitor
-        if (!oldMonitor) {
+        if (!oldMonitor && newMonitor.is_active) {
             return undefined
         }
-        await this.stopMonitor(oldMonitor)
+
+        if (oldMonitor) await this.stopMonitor(oldMonitor)
+
         this.activeMonitorJobs = this.activeMonitorJobs.filter((job) => {
             const tempMonitor = job as Monitor
             return tempMonitor.id !== newMonitor.id
         })
-        await this.startMonitor(newMonitor)
+        if (newMonitor.is_active) await this.startMonitor(newMonitor)
         return newMonitor
     }
 
@@ -100,6 +102,16 @@ export class MonitorService {
         if (foundMonitor) {
             foundMonitor.stopJob()
         }
+    }
+
+    async pauseMonitor(monitor: Monitor) {
+        await this.stopMonitor(monitor)
+        await this.monitorRepository.pause(monitor.id)
+    }
+
+    async resumeMonitor(monitor: Monitor) {
+        await this.startMonitor(monitor)
+        await this.monitorRepository.resume(monitor.id)
     }
 
     async registerHeartBeat(

@@ -32,7 +32,15 @@ export function removeMonitorClient(monitorId: string, peer: { send: (arg0: stri
  * @param monitorId
  * @param data
  */
-export function sendMonitorUpdate(monitorId: string, data: never) {
+export function sendMonitorUpdate(
+    monitorId: string,
+    data: {
+        created_at: Date
+        status: 'up' | 'down' | 'degraded'
+        status_code: number
+        response_time: number
+    }
+) {
     const clients = monitorClients.get(monitorId)
     if (!clients) return
     for (const peer of clients) {

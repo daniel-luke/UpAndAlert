@@ -9,6 +9,7 @@ import { useWindowSize } from '@vueuse/core'
 
 const monitorStore = useMonitorStore()
 const { fetch } = monitorStore
+const { lastKnownPage, reloadOverview } = storeToRefs(monitorStore)
 
 const open = ref(false)
 const { width } = useWindowSize()
@@ -24,6 +25,10 @@ const { openDialog, action, monitor, openViaButton } = defineProps<{
     }[]
 }>()
 const finalAction = ref(action)
+
+const notAvailable = computed(() => {
+    return !monitor?.is_active || monitor?.in_maintenance
+})
 
 watch(
     () => openDialog,
@@ -98,6 +103,7 @@ watch(open, async () => {
                     : 'Custom'
     }
 })
+
 async function create() {
     $fetch('/api/monitor/create', {
         method: 'POST',
@@ -110,8 +116,6 @@ async function create() {
                 icon: 'i-heroicons-check-circle',
                 color: 'success'
             })
-            finalAction.value = DialogActions.VIEW
-            open.value = false
             reloadNuxtApp({ force: true })
         })
         .catch((err) => {
@@ -126,7 +130,12 @@ async function create() {
 
 async function unalive() {
     if (!monitor) return
-    fetch(1)
+    $fetch('/api/monitor/delete', {
+        method: 'POST',
+        body: {
+            id: monitor.id
+        }
+    })
         .then(async () => {
             useToast().add({
                 title: 'Monitor deleted',
@@ -134,7 +143,8 @@ async function unalive() {
                 icon: 'i-heroicons-check-circle',
                 color: 'success'
             })
-            await fetch(1)
+            await fetch(lastKnownPage.value)
+            reloadOverview.value = true
             finalAction.value = DialogActions.VIEW
             makeFormNonEditable()
             open.value = false
@@ -168,7 +178,63 @@ async function update() {
             })
             finalAction.value = DialogActions.VIEW
             makeFormNonEditable()
-            await fetch(1)
+            await fetch(lastKnownPage.value)
+        })
+        .catch((err) => {
+            useToast().add({
+                title: 'Error',
+                description: err.message,
+                icon: 'i-heroicons-x-circle',
+                color: 'error'
+            })
+        })
+}
+
+async function pause() {
+    if (!monitor) return
+    $fetch('/api/monitor/pause', {
+        method: 'POST',
+        body: {
+            id: monitor.id
+        }
+    })
+        .then(async () => {
+            useToast().add({
+                title: 'Monitor paused',
+                description: 'Your monitor has been paused successfully',
+                icon: 'i-heroicons-check-pause',
+                color: 'success'
+            })
+            await getUpdatedMonitor()
+            await fetch(lastKnownPage.value)
+        })
+        .catch((err) => {
+            useToast().add({
+                title: 'Error',
+                description: err.message,
+                icon: 'i-heroicons-x-circle',
+                color: 'error'
+            })
+        })
+}
+
+async function resume() {
+    if (!monitor) return
+    $fetch('/api/monitor/resume', {
+        method: 'POST',
+        body: {
+            id: monitor.id
+        }
+    })
+        .then(async () => {
+            useToast().add({
+                title: 'Monitor resumed',
+                description: 'Your monitor has been resumed successfully',
+                icon: 'i-heroicons-check-play',
+                color: 'success'
+            })
+            await getUpdatedMonitor()
+            await fetch(lastKnownPage.value)
         })
         .catch((err) => {
             useToast().add({
@@ -231,31 +297,47 @@ function makeFormNonEditable() {
         <template #header>
             <div class="flex w-full justify-between">
                 <div>
+                    <UBadge v-if="notAvailable" size="md" class="mb-2" variant="soft" color="error"
+                        >{{ $t('paused') }}
+                    </UBadge>
                     <h2 class="text-highlighted font-semibold">{{ dialogTitle }}</h2>
                     <p class="mt-1 text-muted text-sm">{{ dialogDescription }}</p>
                 </div>
-                <div class="inline-flex flex-row gap-2">
+                <div class="inline-flex flex-row gap-2 h-fit">
                     <UButton
-                        v-if="finalAction !== DialogActions.CREATE"
+                        v-if="!notAvailable && finalAction !== DialogActions.CREATE"
                         :disabled="formEditable"
                         type="button"
                         variant="outline"
-                        class="mb-4 font-bold"
+                        class="font-bold"
                         color="info"
                         icon="i-heroicons-pause"
+                        @click.prevent="pause"
+                    />
+                    <UButton
+                        v-if="notAvailable && finalAction !== DialogActions.CREATE"
+                        :disabled="formEditable"
+                        type="button"
+                        variant="outline"
+                        class="font-bold"
+                        color="info"
+                        icon="i-heroicons-play"
+                        @click.prevent="resume"
                     />
                     <UButton
                         v-if="formEditable && finalAction === DialogActions.CREATE"
-                        type="submit"
+                        type="button"
+                        @click.prevent="create"
                         variant="outline"
-                        class="mb-4 font-bold"
+                        class="font-bold"
+                        color="success"
                         icon="i-heroicons-check"
                     />
                     <UButton
                         v-if="finalAction === DialogActions.EDIT"
                         type="button"
                         variant="outline"
-                        class="mb-4 font-bold"
+                        class="font-bold"
                         color="info"
                         icon="i-heroicons-x-mark"
                         @click.prevent="makeFormNonEditable"
@@ -265,7 +347,7 @@ function makeFormNonEditable() {
                         type="button"
                         variant="outline"
                         color="success"
-                        class="mb-4 font-bold"
+                        class="font-bold"
                         icon="i-heroicons-check"
                         @click.prevent="update"
                     />
@@ -274,7 +356,7 @@ function makeFormNonEditable() {
                         v-if="finalAction === DialogActions.VIEW"
                         type="button"
                         variant="outline"
-                        class="mb-4 font-bold"
+                        class="font-bold"
                         color="warning"
                         icon="i-heroicons-pencil-square"
                         @click.prevent="makeFormEditable"
@@ -283,7 +365,7 @@ function makeFormNonEditable() {
                         v-if="finalAction === DialogActions.VIEW"
                         type="button"
                         variant="outline"
-                        class="mb-4 font-bold"
+                        class="font-bold"
                         color="error"
                         icon="i-heroicons-trash"
                         @click.prevent="unalive"
@@ -308,8 +390,17 @@ function makeFormNonEditable() {
                         <div
                             class="grid grid-cols-1 gap-4 md:grid-cols-2 md:max-h-[150px] mb-5 md:mb-20 lg:flex"
                         >
-                            <heartbeat-chart v-if="beats" :beats="beats" />
-                            <uptime-chart v-if="beats && monitor" :id="monitor.id" :beats="beats" />
+                            <heartbeat-chart
+                                v-if="beats"
+                                :beats="beats"
+                                :class="notAvailable ? 'opacity-50 pointer-events-none' : ''"
+                            />
+                            <uptime-chart
+                                v-if="beats && monitor"
+                                :id="monitor.id"
+                                :beats="beats"
+                                :class="notAvailable ? 'opacity-50 pointer-events-none' : ''"
+                            />
                         </div>
                     </div>
                     <div class="flex flex-col gap-2 flex-1">

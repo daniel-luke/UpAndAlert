@@ -63,6 +63,14 @@ export class MonitorRepository {
             .offset((page - 1) * pageSize)
     }
 
+    async pause(id: number): Promise<void> {
+        return this.db<Monitor>('monitors').where({ id }).update({ is_active: false })
+    }
+
+    async resume(id: number): Promise<void> {
+        return this.db<Monitor>('monitors').where({ id }).update({ is_active: true })
+    }
+
     async registerHeartbeat(
         monitor: Monitor,
         statusCode: number,
