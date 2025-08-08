@@ -31,6 +31,10 @@ export function removeMonitorClient(monitorId: string, peer: { send: (arg0: stri
  *
  * @param monitorId
  * @param data
+ * @param data.created_at
+ * @param data.status
+ * @param data.status_code
+ * @param data.response_time
  */
 export function sendMonitorUpdate(
     monitorId: string,

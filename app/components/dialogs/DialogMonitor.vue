@@ -327,11 +327,11 @@ function makeFormNonEditable() {
                     <UButton
                         v-if="formEditable && finalAction === DialogActions.CREATE"
                         type="button"
-                        @click.prevent="create"
                         variant="outline"
                         class="font-bold"
                         color="success"
                         icon="i-heroicons-check"
+                        @click.prevent="create"
                     />
                     <UButton
                         v-if="finalAction === DialogActions.EDIT"

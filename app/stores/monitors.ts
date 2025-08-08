@@ -7,6 +7,7 @@ export const useMonitorStore = defineStore('monitor', () => {
 
     /**
      * Fetch monitors from the API
+     * @param page
      */
     async function fetch(page: number) {
         monitors.value = await $fetch<{ monitors: Monitor[]; total: number }>('/api/monitor/list', {
