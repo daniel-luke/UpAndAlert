@@ -7,16 +7,6 @@ import { MonitorService } from '~~/server/modules/monitoring/services/MonitorSer
 const logger = Logger.getInstance()
 
 export default defineNitroPlugin(async () => {
-    process.on('unhandledRejection', (reason: { code: string }) => {
-        // Optionally filter out EPIPE errors
-        if (reason && (reason.code === 'EPIPE' || reason.code === 'ECONNRESET')) {
-            // Ignore or log as needed
-            return
-        }
-        // Log other unhandled rejections
-        console.error('Unhandled Rejection:', reason)
-    })
-
     // Startup message
     logger.info('core', 'Starting up application')
 
@@ -88,7 +78,7 @@ async function bootstrap() {
 async function startMonitors() {
     logger.info('mon', 'Starting monitors')
     const monitorService = MonitorService.getInstance()
-    const monitors = await monitorService.listMonitors()
+    const monitors = await monitorService.listActiveMonitors()
     logger.info('mon', `Found ${monitors.length} monitors to initialize`)
     monitors.forEach((monitor) => {
         if (monitor.is_active && !monitor.in_maintenance) monitorService.startMonitor(monitor)

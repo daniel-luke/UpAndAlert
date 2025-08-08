@@ -75,6 +75,10 @@ export class MonitorService {
         return this.monitorRepository.all()
     }
 
+    async listActiveMonitors(): Promise<Monitor[]> {
+        return this.monitorRepository.allActive()
+    }
+
     async paginateMonitors(page: number, limit: number): Promise<Monitor[]> {
         return this.monitorRepository.paginate(page, limit)
     }

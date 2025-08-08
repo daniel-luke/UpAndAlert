@@ -55,6 +55,10 @@ export class MonitorRepository {
         return this.db<Monitor>('monitors').select('*')
     }
 
+    async allActive(): Promise<Monitor[]> {
+        return this.db<Monitor>('monitors').select('*').where({ is_active: true })
+    }
+
     async paginate(page: number, pageSize: number): Promise<Monitor[]> {
         return this.db<Monitor>('monitors')
             .select('*')
