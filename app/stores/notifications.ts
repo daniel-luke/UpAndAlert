@@ -5,7 +5,6 @@ export const useNotificationStore = defineStore('notification', () => {
 
     /**
      * Fetch monitors from the API
-     * @param page
      */
     async function fetch() {
         notifications.value = await $fetch<Notification[]>('/api/notification/list', {
@@ -13,6 +12,10 @@ export const useNotificationStore = defineStore('notification', () => {
         })
     }
 
+    /**
+     * Get a notification by its id
+     * @param id
+     */
     function getNotificationById(id: number) {
         return notifications.value.find((notification) => notification.id === id)
     }

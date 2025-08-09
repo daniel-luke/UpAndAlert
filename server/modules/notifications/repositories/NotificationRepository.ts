@@ -46,7 +46,7 @@ export class NotificationRepository {
                     id: notification.id,
                     name: notification.name,
                     notification_type: notification.notification_type,
-                    is_active: (notification.is_active = 1 ? true : false)
+                    is_active: (notification.is_active = !!1)
                 }
             })
         })

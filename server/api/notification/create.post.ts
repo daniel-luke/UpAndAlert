@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { UserService } from '~~/server/modules/auth/services/UserService'
 import { NotificationService } from '~~/server/modules/notifications/services/NotificationService'
-import { Notification } from '~~/server/modules/notifications/models/Notification'
+import type { Notification } from '~~/server/modules/notifications/models/Notification'
 
 const bodySchema = z.object({
     name: z.string().min(3),

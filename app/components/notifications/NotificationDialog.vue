@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { z } from 'zod'
 
-const { id } = defineProps<{
-    id?: number
-}>()
+const { id } = withDefaults(
+    defineProps<{
+        id?: number | undefined
+    }>(),
+    {
+        id: undefined
+    }
+)
 
 const notificationStore = useNotificationStore()
 const { fetch } = notificationStore
