@@ -17,7 +17,7 @@ const bodySchema = z.object({
     subject: z.string().optional(),
     message: z.string().optional(),
     tls: z.boolean().optional(),
-    is_active: z.boolean().optional()
+    is_active: z.boolean()
 })
 
 /**

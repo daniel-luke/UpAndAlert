@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { z } from 'zod'
+import SmtpNotificationOptions from '~/components/notifications/SmtpNotificationOptions.vue'
 
 const { id } = withDefaults(
     defineProps<{
@@ -24,8 +25,8 @@ const schema = z.object({
     password: z.string().optional(),
     from: z.email(),
     to: z.email(),
-    cc: z.email().optional(),
-    bcc: z.email().optional(),
+    cc: z.string().optional(),
+    bcc: z.string().optional(),
     subject: z.string().optional(),
     message: z.string().optional(),
     tls: z.boolean().optional(),
@@ -54,6 +55,17 @@ if (id) {
     if (existingNotification) {
         state.value = existingNotification
     }
+}
+
+const notification_types = ref([
+    {
+        label: 'SMTP',
+        value: 'smtp'
+    }
+])
+
+const components = {
+    smtp: SmtpNotificationOptions
 }
 
 async function onSubmit() {
@@ -113,12 +125,30 @@ async function onSubmit() {
     <UForm
         :state="state"
         :schema="schema"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols3 gap-4"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
         @submit="onSubmit"
     >
-        <UFormField name="name" label="Name">
-            <UInput v-model="state.name" />
-        </UFormField>
-        <UButton type="button" @click.prevent="onSubmit">Submit</UButton>
+        <div class="flex flex-col col-span-1 gap-4">
+            <h2 class="text-sm font-bold">{{ $t('notification.general') }}</h2>
+            <UFormField name="name" label="Name">
+                <UInput v-model="state.name" class="w-full" placeholder="My notification" />
+            </UFormField>
+            <UFormField name="type" label="Type">
+                <USelect
+                    v-model="state.notification_type"
+                    :items="notification_types"
+                    class="w-full"
+                />
+            </UFormField>
+            <UButton class="w-fit hidden md:block" type="button" @click.prevent="onSubmit"
+                >Submit</UButton
+            >
+        </div>
+        <div class="col-span-1 lg:col-span-2">
+            <component v-model:state="state" :is="components[state.notification_type]" />
+        </div>
+        <div class="col-span-1 md:col-span-2 lg:col-span-3 mt-4">
+            <UButton class="md:hidden" type="button" @click.prevent="onSubmit">Submit</UButton>
+        </div>
     </UForm>
 </template>
