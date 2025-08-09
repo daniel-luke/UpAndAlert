@@ -24,8 +24,8 @@ function onFieldChange(field, value) {
             <UInput
                 :value="state.hostname"
                 class="w-full"
-                @input="onFieldChange('hostname', $event.target.value)"
                 placeholder="smtp.example.com"
+                @input="onFieldChange('hostname', $event.target.value)"
             />
         </UFormField>
         <div class="grid grid-cols-2 gap-4">
@@ -47,8 +47,8 @@ function onFieldChange(field, value) {
             <UInput
                 :value="state.username"
                 class="w-full"
-                @input="onFieldChange('username', $event.target.value)"
                 placeholder="user@example.com"
+                @input="onFieldChange('username', $event.target.value)"
             />
         </UFormField>
         <UFormField name="password" label="Password">
@@ -56,8 +56,8 @@ function onFieldChange(field, value) {
                 :value="state.password"
                 type="password"
                 class="w-full"
-                @input="onFieldChange('password', $event.target.value)"
                 placeholder="********"
+                @input="onFieldChange('password', $event.target.value)"
             />
         </UFormField>
         <UFormField name="from" label="Sender" required>
@@ -81,8 +81,8 @@ function onFieldChange(field, value) {
                 :value="state.cc"
                 type="email"
                 class="w-full"
-                @input="onFieldChange('cc', $event.target.value)"
                 placeholder="john@doe.com, jane@doe.com"
+                @input="onFieldChange('cc', $event.target.value)"
             />
         </UFormField>
         <UFormField name="bcc" label="BCC">
@@ -90,8 +90,8 @@ function onFieldChange(field, value) {
                 :value="state.bcc"
                 type="email"
                 class="w-full"
-                @input="onFieldChange('bcc', $event.target.value)"
                 placeholder="john@doe.com, jane@doe.com"
+                @input="onFieldChange('bcc', $event.target.value)"
             />
         </UFormField>
         <div class="col-span-1 lg:col-span-2 border-b-1 border-gray-200 dark:border-gray-600"></div>
@@ -106,17 +106,17 @@ function onFieldChange(field, value) {
                 :value="state.subject"
                 type="text"
                 class="w-full"
-                @input="onFieldChange('subject', $event.target.value)"
                 placeholder="Alert! Monitor ${monitor.name} is down!"
+                @input="onFieldChange('subject', $event.target.value)"
             />
         </UFormField>
         <UFormField class="lg:col-span-2" name="message" label="Message">
             <UTextarea
                 :value="state.message"
                 class="w-full"
-                @input="onFieldChange('message', $event.target.value)"
                 placeholder="Monitor ${monitor.name} is down!"
                 :rows="5"
+                @input="onFieldChange('message', $event.target.value)"
             />
         </UFormField>
     </div>

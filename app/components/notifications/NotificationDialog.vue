@@ -145,7 +145,7 @@ async function onSubmit() {
             >
         </div>
         <div class="col-span-1 lg:col-span-2">
-            <component v-model:state="state" :is="components[state.notification_type]" />
+            <component :is="components[state.notification_type]" v-model:state="state" />
         </div>
         <div class="col-span-1 md:col-span-2 lg:col-span-3 mt-4">
             <UButton class="md:hidden" type="button" @click.prevent="onSubmit">Submit</UButton>

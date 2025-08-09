@@ -15,6 +15,7 @@ export const useNotificationStore = defineStore('notification', () => {
     /**
      * Get a notification by its id
      * @param id
+     * @returns
      */
     function getNotificationById(id: number) {
         return notifications.value.find((notification) => notification.id === id)
