@@ -32,7 +32,7 @@ export class SmtpService {
 
         await transporter
             .verify()
-            .then(() => {
+            .then(async () => {
                 transporter.sendMail({
                     from: notification.from,
                     to: notification.to,

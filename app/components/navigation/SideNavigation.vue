@@ -57,6 +57,15 @@ const items = ref<NavigationMenuItem[][]>([
             to: localePath('/projects'),
             tooltip: true,
             tooltipText: $t('projects')
+        }
+    ],
+    [
+        {
+            label: $t('notifications'),
+            icon: 'i-lucide-bell',
+            to: localePath('/notifications'),
+            tooltip: true,
+            tooltipText: $t('notifications')
         },
         {
             label: $t('incidents'),
@@ -105,7 +114,7 @@ const items = ref<NavigationMenuItem[][]>([
                 </UTooltip>
                 <div v-if="isOpen" class="flex flex-col">
                     <span class="text-md font-bold">{{ $t('app.name') }}</span>
-                    <span class="text-xs">1.0.0-alpha</span>
+                    <span class="text-xs">v0.1.0</span>
                 </div>
             </div>
             <UNavigationMenu

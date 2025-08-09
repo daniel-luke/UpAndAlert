@@ -1,0 +1,56 @@
+<mjml>
+    <mj-head>
+        <mj-style inline="inline">
+            .mail-body table {
+                font-size: 16px !important;
+            }
+
+            .mail-body th {
+                padding: 8px 0px;
+            }
+
+            .body-text a {
+                color: #1fa34e
+            }
+        </mj-style>
+    </mj-head>
+    <mj-body css-class="mail-body">
+        <mj-section>
+            <mj-column>
+
+                <mj-text font-size="20px">PulseWatch</mj-text>
+
+                <mj-divider border-color="#1fa34e"></mj-divider>
+
+                <mj-text font-size="16px">Hi User,</mj-text>
+                <mj-text font-size="16px">One or more monitors just went down!</mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-section>
+            <mj-column>
+                <mj-table>
+                    <tr style="text-align:left;">
+                        <th>Name</th>
+                        <td>DGSE Portal</td>
+                    </tr>
+                    <tr style="text-align:left;">
+                        <th>Address</th>
+                        <td>https://www.dgse.cloud</td>
+                    </tr>
+                    <tr style="text-align:left;">
+                        <th>Status</th>
+                        <td>404</td>
+                    </tr>
+                </mj-table>
+            </mj-column>
+        </mj-section>
+        <mj-section>
+            <mj-column>
+                <mj-text font-size="16px" css-class="body-text">
+                    For more information, visit the dashboard: <a href="#">here</a>.
+                </mj-text>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>

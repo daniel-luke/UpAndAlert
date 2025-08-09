@@ -53,5 +53,6 @@
   "monitor.field.type": "Monitortype",
   "monitor.field.address": "Adres",
   "monitor.field.interval": "Pulse interval",
-  "monitor.field.custom.interval": "Aangepaste interval"
+  "monitor.field.custom.interval": "Aangepaste interval",
+  "notifications": "Notificaties"
 }
