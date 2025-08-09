@@ -12,7 +12,9 @@
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "format": "prettier --check .",
-        "format:fix": "prettier --write ."
+      "format:fix": "prettier --write .",
+      "staging:build": "docker build --platform linux/amd64 -t ghcr.io/daniel-luke/pulsewatch:staging .",
+      "staging:push": "docker push ghcr.io/daniel-luke/pulsewatch:staging"
     },
     "dependencies": {
         "@aquarela/time-to-cron": "^2.1.2",
