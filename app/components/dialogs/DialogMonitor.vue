@@ -6,6 +6,7 @@ import type { Monitor } from '~~/server/modules/monitoring/models/Monitor'
 import HeartbeatChart from '~/components/monitors/HeartbeatChart.vue'
 import UptimeChart from '~/components/monitors/UptimeChart.vue'
 import { useWindowSize } from '@vueuse/core'
+import NotificationCoupler from '~/components/notifications/NotificationCoupler.vue'
 
 const monitorStore = useMonitorStore()
 const { fetch } = monitorStore
@@ -443,11 +444,9 @@ function makeFormNonEditable() {
                     <div class="flex flex-col gap-2 flex-1">
                         <h2 class="text-sm font-bold">{{ $t('monitor.specific') }}</h2>
                     </div>
-                    <div class="flex flex-col gap-2 flex-1">
+                    <div v-if="monitor" class="flex flex-col gap-2 flex-1">
                         <h2 class="text-sm font-bold">{{ $t('monitor.notifications') }}</h2>
-                        <span class="text-sm text-gray-500 self-center justify-self-center"
-                            >Not implemented yet.</span
-                        >
+                        <notification-coupler :monitor-id="monitor.id" />
                     </div>
                     <div class="col-span-1 flex justify-between md:col-span-2 lg:col-span-3">
                         <div
