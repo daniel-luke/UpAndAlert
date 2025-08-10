@@ -1,5 +1,6 @@
 import type { Notification } from '~~/server/modules/notifications/models/Notification'
 import nodemailer from 'nodemailer'
+import type { Monitor } from '~~/server/modules/monitoring/models/Monitor'
 
 /**
  * @name SMTPService
@@ -19,7 +20,7 @@ export class SmtpService {
         return SmtpService.instance
     }
 
-    async sendMail(notification: Notification) {
+    async sendUpMail(notification: Notification, monitor: Monitor) {
         if (notification.notification_type !== 'smtp') {
             throw new Error('Notification type is not smtp. Yet tried to send smtp notification.')
         }
@@ -36,9 +37,59 @@ export class SmtpService {
                 transporter.sendMail({
                     from: notification.from,
                     to: notification.to,
-                    subject: notification.subject,
-                    html: notification.message
+                    subject: `✅️[PulseWatch] ${monitor.name} Service is up`,
+                    html: `${monitor.name} on: ${monitor.address} is back up!`
                 })
+            })
+            .catch((err) => {
+                throw new Error(err)
+            })
+    }
+
+    async sendDownMail(notification: Notification, monitor: Monitor) {
+        if (notification.notification_type !== 'smtp') {
+            throw new Error('Notification type is not smtp. Yet tried to send smtp notification.')
+        }
+
+        const transporter = nodemailer.createTransport({
+            host: notification.hostname,
+            port: notification.port,
+            secure: notification.tls
+        })
+
+        await transporter
+            .verify()
+            .then(async () => {
+                let opts: object = {
+                    from: notification.from,
+                    to: notification.to,
+                    subject: `🚨 [PulseWatch] ${monitor.name} Service is down`,
+                    html: `${monitor.name} on: ${monitor.address} just went down.`
+                }
+
+                if (notification.username && notification.password) {
+                    opts = {
+                        username: notification.username,
+                        password: notification.password,
+                        ...opts
+                    }
+                }
+
+                if (notification.cc) {
+                    opts = {
+                        cc: notification.cc,
+                        ...opts
+                    }
+                }
+
+                if (notification.bcc) {
+                    opts = {
+                        bcc: notification.bcc,
+                        ...opts
+                    }
+                }
+
+                transporter.sendMail(opts)
             })
             .catch((err) => {
                 throw new Error(err)

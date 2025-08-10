@@ -14,6 +14,7 @@ export interface Monitor {
     polling_interval: number
     in_maintenance: boolean
     is_active: boolean
+    notified: number
     job: CronJob | null
 
     startJob(): void
