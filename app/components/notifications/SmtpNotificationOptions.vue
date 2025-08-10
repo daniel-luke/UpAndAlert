@@ -94,31 +94,6 @@ function onFieldChange(field, value) {
                 @input="onFieldChange('bcc', $event.target.value)"
             />
         </UFormField>
-        <div class="col-span-1 lg:col-span-2 border-b-1 border-gray-200 dark:border-gray-600"></div>
-        <div class="col-span-1 lg:col-span-2 text-lg font-bold">Message</div>
-        <p class="col-span-1 lg:col-span-2 text-sm text-gray-500 dark:text-gray-400">
-            You can use variables in the message. For example: <code>${monitor.name}</code> will be
-            replaced with the monitor name. Available variables: <code>${monitor.name}</code>,
-            <code>${monitor.url}</code>.
-        </p>
-        <UFormField class="lg:col-span-2" name="subject" label="Subject" required>
-            <UInput
-                :value="state.subject"
-                type="text"
-                class="w-full"
-                placeholder="Alert! Monitor ${monitor.name} is down!"
-                @input="onFieldChange('subject', $event.target.value)"
-            />
-        </UFormField>
-        <UFormField class="lg:col-span-2" name="message" label="Message">
-            <UTextarea
-                :value="state.message"
-                class="w-full"
-                placeholder="Monitor ${monitor.name} is down!"
-                :rows="5"
-                @input="onFieldChange('message', $event.target.value)"
-            />
-        </UFormField>
     </div>
 </template>
 

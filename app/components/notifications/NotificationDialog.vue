@@ -2,14 +2,10 @@
 import { z } from 'zod'
 import SmtpNotificationOptions from '~/components/notifications/SmtpNotificationOptions.vue'
 
-const { id } = withDefaults(
-    defineProps<{
-        id?: number | undefined
-    }>(),
-    {
-        id: undefined
-    }
-)
+const { id } = defineProps<{
+    // eslint-disable-next-line vue/require-default-prop
+    id?: number | undefined
+}>()
 
 const notificationStore = useNotificationStore()
 const { fetch } = notificationStore

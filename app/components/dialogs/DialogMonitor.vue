@@ -17,8 +17,10 @@ const { width } = useWindowSize()
 const { openDialog, action, monitor, openViaButton } = defineProps<{
     action: DialogActions
     openDialog?: boolean
+    // eslint-disable-next-line vue/require-default-prop
     monitor?: Monitor
     openViaButton?: boolean
+    // eslint-disable-next-line vue/require-default-prop
     beats?: {
         status: string
         created_at: string
