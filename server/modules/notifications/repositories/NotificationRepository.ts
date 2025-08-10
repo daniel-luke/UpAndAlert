@@ -53,14 +53,14 @@ export class NotificationRepository {
     }
 
     async attachNotificationToMonitor(monitor: Monitor, notification: Notification) {
-        return this.db('monitor_notification').insert({
+        return this.db('monitor_notifications').insert({
             monitor_id: monitor.id,
             notification_id: notification.id
         })
     }
 
     async detachNotificationFromMonitor(monitor: Monitor, notification: Notification) {
-        return this.db('monitor_notification')
+        return this.db('monitor_notifications')
             .where('monitor_id', monitor.id)
             .andWhere('notification_id', notification.id)
             .delete()
