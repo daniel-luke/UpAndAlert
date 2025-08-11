@@ -90,7 +90,7 @@ async function startMonitors() {
  */
 async function postInstall() {
     // TODO: SMTP is still broken. It looks like it cannot resolve localhost. Need to fix this.
-    // const monitor = await MonitorService.getInstance().getMonitorById(1)
+    // const monitor = await MonitorService.getInstance().getMonitorById(24)
     // if (!monitor) return
     //
     // const ntfy = await NotificationService.getInstance().getNotificationsForMonitor(monitor)

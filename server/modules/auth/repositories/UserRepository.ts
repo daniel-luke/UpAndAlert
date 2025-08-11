@@ -45,6 +45,8 @@ export class UserRepository {
     }
 
     async all(): Promise<User[]> {
-        return this.db<User>('users').select('*')
+        const columns = await this.db<User[]>('users').columnInfo()
+        const fields = Object.keys(columns).filter((column) => column !== 'password_hash')
+        return this.db<User[]>('users').select(fields)
     }
 }

@@ -3,6 +3,9 @@ import { MonitorRepository } from '~~/server/modules/monitoring/repositories/Mon
 import { HttpMonitor } from '~~/server/modules/monitoring/models/HttpMonitor'
 import type { Status } from '~~/server/modules/monitoring/types/Status'
 import { sendMonitorUpdate } from '~~/server/utils/monitor-clients'
+import { SmtpService } from '~~/server/modules/notifications/services/SmtpService'
+import { NotificationService } from '~~/server/modules/notifications/services/NotificationService'
+import type { Notification } from '~~/server/modules/notifications/models/Notification'
 
 /**
  * @name MonitorService
@@ -31,7 +34,10 @@ export class MonitorService {
     }
 
     async createMonitor(
-        data: Omit<Monitor, 'id' | 'in_maintenance' | 'is_active' | 'job' | 'startJob' | 'stopJob'>
+        data: Omit<
+            Monitor,
+            'id' | 'in_maintenance' | 'is_active' | 'job' | 'startJob' | 'stopJob' | 'notified'
+        >
     ): Promise<Monitor> {
         return this.monitorRepository.create({
             name: data.name,
@@ -136,6 +142,23 @@ export class MonitorService {
             status_code: heartbeat.status_code,
             response_time: heartbeat.response_time
         })
+
+        // Send notification if monitor is down or up again
+        // If down message has been sent and status is up then send up message
+        if (monitor.notified === 1 && status === 'up') {
+            // Send up message
+            await this.sendUpMessage(monitor)
+            await this.monitorRepository.setNotified(monitor, false)
+            monitor.notified = 0
+        }
+
+        // If down message has not been sent and status is down then send down message
+        if (monitor.notified === 0 && status === 'down') {
+            // Send down message
+            await this.sendDownMessage(monitor)
+            await this.monitorRepository.setNotified(monitor, true)
+            monitor.notified = 1
+        }
         return heartbeat
     }
 
@@ -152,5 +175,25 @@ export class MonitorService {
 
     async getLastHeartbeat(monitor: Monitor) {
         return this.monitorRepository.getLastHeartbeat(monitor)
+    }
+
+    private async sendUpMessage(monitor: Monitor) {
+        const notifications: Notification[] =
+            await NotificationService.getInstance().getNotificationsForMonitor(monitor)
+
+        for (const notification of notifications) {
+            if (notification.notification_type === 'smtp')
+                await SmtpService.getInstance().sendUpMail(notification, monitor)
+        }
+    }
+
+    private async sendDownMessage(monitor: Monitor) {
+        const notifications: Notification[] =
+            await NotificationService.getInstance().getNotificationsForMonitor(monitor)
+
+        for (const notification of notifications) {
+            if (notification.notification_type === 'smtp')
+                await SmtpService.getInstance().sendDownMail(notification, monitor)
+        }
     }
 }

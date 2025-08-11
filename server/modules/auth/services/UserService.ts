@@ -84,4 +84,14 @@ export class UserService {
             })
         }
     }
+
+    async checkAdmin(event: H3Event): Promise<void> {
+        const { user } = await requireUserSession(event)
+        if (!user.is_admin) {
+            throw createError({
+                statusCode: 403,
+                statusMessage: 'Forbidden'
+            })
+        }
+    }
 }

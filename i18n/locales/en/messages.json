@@ -56,5 +56,6 @@
     "monitor.field.type": "Monitor Type",
     "monitor.field.address": "Address",
     "monitor.field.interval": "Pulse interval",
-    "monitor.field.custom.interval": "Custom interval"
+  "monitor.field.custom.interval": "Custom interval",
+  "notifications": "Notifications"
 }

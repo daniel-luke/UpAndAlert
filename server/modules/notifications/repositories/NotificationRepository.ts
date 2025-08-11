@@ -23,7 +23,7 @@ export class NotificationRepository {
         return NotificationRepository.instance
     }
 
-    async createNotification(notification: Notification) {
+    async createNotification(notification: Omit<Notification, 'id'>) {
         return this.db('notifications').insert(notification)
     }
 
@@ -35,15 +35,32 @@ export class NotificationRepository {
         return this.db('notifications').where('id', notification.id).delete()
     }
 
+    async getNotificationById(id: number) {
+        return this.db<Notification>('notifications').where('id', id).first()
+    }
+
+    async getAllNotifications() {
+        return this.db<Notification>('notifications').then((notifications) => {
+            return notifications.map((notification) => {
+                return {
+                    id: notification.id,
+                    name: notification.name,
+                    notification_type: notification.notification_type,
+                    is_active: (notification.is_active = !!1)
+                }
+            })
+        })
+    }
+
     async attachNotificationToMonitor(monitor: Monitor, notification: Notification) {
-        return this.db('monitor_notification').insert({
+        return this.db('monitor_notifications').insert({
             monitor_id: monitor.id,
             notification_id: notification.id
         })
     }
 
     async detachNotificationFromMonitor(monitor: Monitor, notification: Notification) {
-        return this.db('monitor_notification')
+        return this.db('monitor_notifications')
             .where('monitor_id', monitor.id)
             .andWhere('notification_id', notification.id)
             .delete()
@@ -61,7 +78,7 @@ export class NotificationRepository {
     }
 
     async getMonitorsForNotification(notification: Notification) {
-        return this.db<Monitor>('monitors')
+        return this.db<Monitor[]>('monitors')
             .join('monitor_notifications', 'monitors.id', '=', 'monitor_notifications.monitor_id')
             .where('monitor_notifications.notification_id', notification.id)
     }

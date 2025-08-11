@@ -17,6 +17,7 @@ export class HttpMonitor implements Monitor {
     monitor_type: string
     name: string
     polling_interval: number
+    notified: number
     job: CronJob | null = null
     logger: Logger = Logger.getInstance()
     monitorService: MonitorService = MonitorService.getInstance()
@@ -29,6 +30,7 @@ export class HttpMonitor implements Monitor {
         this.in_maintenance = monitor.in_maintenance
         this.is_active = monitor.is_active
         this.monitor_type = monitor.monitor_type
+        this.notified = monitor.notified
         this.name = monitor.name
         this.polling_interval = monitor.polling_interval
     }

@@ -47,13 +47,10 @@ watch(reloadOverview, async () => {
 
 <template>
     <NuxtLayout name="default">
-        <div
-            class="flex justify-between items-center sticky top-0 bg-white dark:bg-gray-900 z-10 p-4"
-        >
-            <h1 class="text-2xl font-bold">{{ $t('monitors') }}</h1>
-            <div class="flex gap-4">
+        <page-header :title="$t('monitors')">
+            <template #actions>
                 <UPagination
-                    v-if="width > 768"
+                    v-if="width > 768 && monitors.total > 12"
                     v-model:page="page"
                     :items-per-page="12"
                     :sibling-count="1"
@@ -63,8 +60,8 @@ watch(reloadOverview, async () => {
                     :show-edges="true"
                 />
                 <dialog-monitor open-via-button :action="DialogActions.CREATE" />
-            </div>
-        </div>
+            </template>
+        </page-header>
         <div v-if="!isLoading && monitors.monitors.length > 0">
             <monitor-list :monitor-list="monitors.monitors" />
             <UPagination
