@@ -13,6 +13,6 @@ export default defineNuxtRouteMiddleware(() => {
     }
 
     if (!user.value.is_admin) {
-        return abortNavigation("You don't have permission to access this page")
+        return navigateTo('/')
     }
 })

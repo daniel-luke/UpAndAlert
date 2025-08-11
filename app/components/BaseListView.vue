@@ -2,10 +2,11 @@
 import type { TableColumn } from '#ui/components/Table.vue'
 import { useElementSize, useWindowSize } from '@vueuse/core'
 import type { Notification } from '~/types/Notification'
+import type { User } from '#auth-utils'
 
 const { data, columns } = defineProps<{
-    data: Notification[]
-    columns: TableColumn<Notification>[]
+    data: Notification[] | User[]
+    columns: TableColumn<Notification>[] | TableColumn<User>[]
     empty: string
     sticky: boolean
 }>()
