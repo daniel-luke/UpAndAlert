@@ -49,14 +49,16 @@ const items = ref<NavigationMenuItem[][]>([
             icon: 'i-lucide-component',
             to: localePath('/components'),
             tooltip: true,
-            tooltipText: $t('components')
+            tooltipText: $t('components'),
+            disabled: true
         },
         {
             label: $t('projects'),
             icon: 'i-lucide-folder',
             to: localePath('/projects'),
             tooltip: true,
-            tooltipText: $t('projects')
+            tooltipText: $t('projects'),
+            disabled: true
         }
     ],
     [
@@ -72,21 +74,23 @@ const items = ref<NavigationMenuItem[][]>([
             icon: 'i-lucide-alert-triangle',
             to: localePath('/incidents'),
             tooltip: true,
-            tooltipText: $t('incidents')
+            tooltipText: $t('incidents'),
+            disabled: true
         },
         {
             label: $t('status.pages'),
             icon: 'i-lucide-file-text',
             to: localePath('/status-pages'),
             tooltip: true,
-            tooltipText: $t('status.pages')
+            tooltipText: $t('status.pages'),
+            disabled: true
         }
     ],
     [
         {
-            label: $t('settings'),
-            icon: 'i-lucide-settings',
-            to: localePath('/settings'),
+            label: $t('users'),
+            icon: 'i-lucide-users',
+            to: localePath('/users'),
             tooltip: true,
             class: user.value!.is_admin ? '' : 'hidden',
             tooltipText: $t('settings')
