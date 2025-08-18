@@ -111,6 +111,10 @@ export class MonitorService {
         const foundMonitor = job as Monitor
         if (foundMonitor) {
             foundMonitor.stopJob()
+            this.activeMonitorJobs = this.activeMonitorJobs.filter((job) => {
+                const tempMonitor = job as Monitor
+                return tempMonitor.id !== monitor.id
+            })
         }
     }
 

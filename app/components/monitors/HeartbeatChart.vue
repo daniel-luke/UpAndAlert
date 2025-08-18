@@ -15,15 +15,19 @@ const categories: Record<string, BulletLegendItemInterface> = {
 }
 
 interface AreaChartItem {
-    status: string
     created_at: string
     response_time: number
 }
 
-const AreaChartData: AreaChartItem[] = props.beats
+const AreaChartData: AreaChartItem[] = props.beats.map((beat) => {
+    return {
+        created_at: new Date(beat.created_at).toLocaleString(),
+        response_time: Math.round(beat.response_time)
+    }
+})
 
 const xFormatter = (tick: number): string => {
-    return `${AreaChartData[tick]?.created_at}`
+    return `${new Date(AreaChartData[tick]!.created_at).toLocaleString()}`
 }
 </script>
 
@@ -34,10 +38,11 @@ const xFormatter = (tick: number): string => {
         :height="150"
         :categories="categories"
         :y-grid-line="false"
-        :min-max-ticks-only="true"
-        :y-num-ticks="1"
+        :min-max-ticks-only="false"
+        :y-num-ticks="2"
         :x-num-ticks="1"
         :x-formatter="xFormatter"
+        :y-formatter="(tick: number) => `${tick}ms`"
         :legend-position="LegendPosition.Bottom"
         :hide-legend="false"
     />

@@ -6,12 +6,13 @@ interface Props {
               created_at: string
               response_time: number
           }[]
-        | unefined
+        | undefined
 }
 
 const { beats } = defineProps<Props>()
 const isLoading = ref(true)
 onMounted(() => {
+    console.log(beats)
     isLoading.value = false
 })
 </script>
@@ -24,9 +25,9 @@ onMounted(() => {
                 :key="beat.status"
                 :delay-duration="0"
                 :text="
-                    beat.created_at +
+                    new Date(beat.created_at).toLocaleString() +
                     ' - ' +
-                    beat.response_time +
+                    Math.round(beat.response_time) +
                     'ms - ' +
                     (beat.status === 'up' ? $t('up') : $t('down'))
                 "
