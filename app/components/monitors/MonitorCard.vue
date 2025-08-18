@@ -78,7 +78,7 @@ onMounted(() => {
             </div>
         </template>
         <template #footer>
-            <heartbeat-bar :beats="beats" />
+            <heartbeat-bar v-if="!monitor.in_maintenance && monitor.is_active" :beats="beats" />
         </template>
     </UCard>
     <dialog-monitor
