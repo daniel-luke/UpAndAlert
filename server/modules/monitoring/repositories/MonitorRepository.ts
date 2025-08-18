@@ -92,7 +92,8 @@ export class MonitorRepository {
                 monitor_id: monitor.id,
                 status_code: statusCode,
                 status: status,
-                response_time: responseTime
+                response_time: responseTime,
+                created_at: new Date()
             })
             .returning('*')
         return created
