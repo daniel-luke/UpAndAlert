@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { Notification } from '~/types/Notification'
 
-const { notification, monitorId } = defineProps<{
+const { notification, monitorId, disabled } = defineProps<{
     notification: Notification
     monitorId: number
+    disabled: boolean
 }>()
 
 const toggleValue: Ref<boolean> = ref(false)
@@ -15,7 +16,6 @@ await $fetch(`/api/notification/monitor/${monitorId}`, {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         res.map((attachedNotification: { notification_id: number }) => {
-            console.log(attachedNotification.notification_id!, notification.id)
             if (attachedNotification.notification_id! === notification.id) {
                 toggleValue.value = true
             } else {
@@ -93,6 +93,7 @@ async function detach() {
         :key="notification.id"
         :label="notification.name"
         :model-value="toggleValue"
+        :disabled="disabled"
         @change.prevent="handleToggle"
     />
 </template>

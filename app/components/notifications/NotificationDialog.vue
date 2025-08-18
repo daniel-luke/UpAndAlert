@@ -65,7 +65,6 @@ const components = {
 }
 
 async function onSubmit() {
-    console.log(state.value)
     if (id) {
         await $fetch(`/api/notification/${id}`, {
             method: 'POST',
