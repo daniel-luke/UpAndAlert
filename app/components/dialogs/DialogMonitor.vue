@@ -447,7 +447,7 @@ function makeFormNonEditable() {
                     </div>
                     <div v-if="monitor" class="flex flex-col gap-2 flex-1">
                         <h2 class="text-sm font-bold">{{ $t('monitor.notifications') }}</h2>
-                        <notification-coupler :monitor-id="monitor.id" />
+                        <notification-coupler :monitor-id="monitor.id" :action="finalAction" />
                     </div>
                     <div class="col-span-1 flex justify-between md:col-span-2 lg:col-span-3">
                         <div

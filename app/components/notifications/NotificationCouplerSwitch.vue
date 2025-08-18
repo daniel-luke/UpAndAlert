@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { Notification } from '~/types/Notification'
 
-const { notification, monitorId } = defineProps<{
+const { notification, monitorId, disabled } = defineProps<{
     notification: Notification
     monitorId: number
+    disabled: boolean
 }>()
 
 const toggleValue: Ref<boolean> = ref(false)
@@ -92,6 +93,7 @@ async function detach() {
         :key="notification.id"
         :label="notification.name"
         :model-value="toggleValue"
+        :disabled="disabled"
         @change.prevent="handleToggle"
     />
 </template>

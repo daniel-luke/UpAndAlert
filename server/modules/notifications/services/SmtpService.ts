@@ -31,6 +31,13 @@ export class SmtpService {
             secure: notification.tls
         })
 
+        if (notification.username && notification.password) {
+            transporter.set('auth', {
+                user: notification.username,
+                pass: notification.password
+            })
+        }
+
         await transporter
             .verify()
             .then(async () => {
@@ -56,6 +63,13 @@ export class SmtpService {
             port: notification.port,
             secure: notification.tls
         })
+
+        if (notification.username && notification.password) {
+            transporter.set('auth', {
+                user: notification.username,
+                pass: notification.password
+            })
+        }
 
         await transporter
             .verify()
