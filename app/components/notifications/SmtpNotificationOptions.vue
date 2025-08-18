@@ -39,7 +39,7 @@ function onFieldChange(field, value) {
             <UFormField name="secure" label="Secure">
                 <UCheckbox
                     :model-value="state.tls"
-                    @input="onFieldChange('tls', $event.target.checked)"
+                    @update:model-value="onFieldChange('tls', $event)"
                 />
             </UFormField>
         </div>

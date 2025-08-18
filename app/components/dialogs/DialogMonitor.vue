@@ -83,7 +83,6 @@ const dialogDescription = computed(() => {
 })
 
 watch(intervalChoice, (value) => {
-    console.log(value)
     state.value.polling_interval =
         value === 'Every minute'
             ? 60

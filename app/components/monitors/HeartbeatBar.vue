@@ -12,7 +12,6 @@ interface Props {
 const { beats } = defineProps<Props>()
 const isLoading = ref(true)
 onMounted(() => {
-    console.log(beats)
     isLoading.value = false
 })
 </script>

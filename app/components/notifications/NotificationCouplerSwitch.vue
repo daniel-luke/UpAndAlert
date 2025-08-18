@@ -15,7 +15,6 @@ await $fetch(`/api/notification/monitor/${monitorId}`, {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         res.map((attachedNotification: { notification_id: number }) => {
-            console.log(attachedNotification.notification_id!, notification.id)
             if (attachedNotification.notification_id! === notification.id) {
                 toggleValue.value = true
             } else {
