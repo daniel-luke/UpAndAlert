@@ -49,35 +49,48 @@ const items = ref<NavigationMenuItem[][]>([
             icon: 'i-lucide-component',
             to: localePath('/components'),
             tooltip: true,
-            tooltipText: $t('components')
+            tooltipText: $t('components'),
+            disabled: true
         },
         {
             label: $t('projects'),
             icon: 'i-lucide-folder',
             to: localePath('/projects'),
             tooltip: true,
-            tooltipText: $t('projects')
+            tooltipText: $t('projects'),
+            disabled: true
+        }
+    ],
+    [
+        {
+            label: $t('notifications'),
+            icon: 'i-lucide-bell',
+            to: localePath('/notifications'),
+            tooltip: true,
+            tooltipText: $t('notifications')
         },
         {
             label: $t('incidents'),
             icon: 'i-lucide-alert-triangle',
             to: localePath('/incidents'),
             tooltip: true,
-            tooltipText: $t('incidents')
+            tooltipText: $t('incidents'),
+            disabled: true
         },
         {
             label: $t('status.pages'),
             icon: 'i-lucide-file-text',
             to: localePath('/status-pages'),
             tooltip: true,
-            tooltipText: $t('status.pages')
+            tooltipText: $t('status.pages'),
+            disabled: true
         }
     ],
     [
         {
-            label: $t('settings'),
-            icon: 'i-lucide-settings',
-            to: localePath('/settings'),
+            label: $t('users'),
+            icon: 'i-lucide-users',
+            to: localePath('/users'),
             tooltip: true,
             class: user.value!.is_admin ? '' : 'hidden',
             tooltipText: $t('settings')
@@ -105,7 +118,7 @@ const items = ref<NavigationMenuItem[][]>([
                 </UTooltip>
                 <div v-if="isOpen" class="flex flex-col">
                     <span class="text-md font-bold">{{ $t('app.name') }}</span>
-                    <span class="text-xs">1.0.0-alpha</span>
+                    <span class="text-xs">v0.1.0</span>
                 </div>
             </div>
             <UNavigationMenu

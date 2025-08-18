@@ -6,6 +6,7 @@ import type { Monitor } from '~~/server/modules/monitoring/models/Monitor'
 import HeartbeatChart from '~/components/monitors/HeartbeatChart.vue'
 import UptimeChart from '~/components/monitors/UptimeChart.vue'
 import { useWindowSize } from '@vueuse/core'
+import NotificationCoupler from '~/components/notifications/NotificationCoupler.vue'
 
 const monitorStore = useMonitorStore()
 const { fetch } = monitorStore
@@ -16,8 +17,10 @@ const { width } = useWindowSize()
 const { openDialog, action, monitor, openViaButton } = defineProps<{
     action: DialogActions
     openDialog?: boolean
+    // eslint-disable-next-line vue/require-default-prop
     monitor?: Monitor
     openViaButton?: boolean
+    // eslint-disable-next-line vue/require-default-prop
     beats?: {
         status: string
         created_at: string
@@ -27,6 +30,7 @@ const { openDialog, action, monitor, openViaButton } = defineProps<{
 const finalAction = ref(action)
 
 const notAvailable = computed(() => {
+    if (action === DialogActions.CREATE) return false
     return !monitor?.is_active || monitor?.in_maintenance
 })
 
@@ -101,6 +105,8 @@ watch(open, async () => {
                   : state.value.polling_interval === 86400
                     ? 'Every day'
                     : 'Custom'
+    } else {
+        finalAction.value = DialogActions.VIEW
     }
 })
 
@@ -305,7 +311,11 @@ function makeFormNonEditable() {
                 </div>
                 <div class="inline-flex flex-row gap-2 h-fit">
                     <UButton
-                        v-if="!notAvailable && finalAction !== DialogActions.CREATE"
+                        v-if="
+                            !notAvailable &&
+                            finalAction !== DialogActions.CREATE &&
+                            finalAction !== DialogActions.EDIT
+                        "
                         :disabled="formEditable"
                         type="button"
                         variant="outline"
@@ -324,34 +334,6 @@ function makeFormNonEditable() {
                         icon="i-heroicons-play"
                         @click.prevent="resume"
                     />
-                    <UButton
-                        v-if="formEditable && finalAction === DialogActions.CREATE"
-                        type="button"
-                        variant="outline"
-                        class="font-bold"
-                        color="success"
-                        icon="i-heroicons-check"
-                        @click.prevent="create"
-                    />
-                    <UButton
-                        v-if="finalAction === DialogActions.EDIT"
-                        type="button"
-                        variant="outline"
-                        class="font-bold"
-                        color="info"
-                        icon="i-heroicons-x-mark"
-                        @click.prevent="makeFormNonEditable"
-                    />
-                    <UButton
-                        v-if="formEditable && finalAction === DialogActions.EDIT"
-                        type="button"
-                        variant="outline"
-                        color="success"
-                        class="font-bold"
-                        icon="i-heroicons-check"
-                        @click.prevent="update"
-                    />
-
                     <UButton
                         v-if="finalAction === DialogActions.VIEW"
                         type="button"
@@ -464,16 +446,45 @@ function makeFormNonEditable() {
                     <div class="flex flex-col gap-2 flex-1">
                         <h2 class="text-sm font-bold">{{ $t('monitor.specific') }}</h2>
                     </div>
-                    <div class="flex flex-col gap-2 flex-1">
+                    <div v-if="monitor" class="flex flex-col gap-2 flex-1">
                         <h2 class="text-sm font-bold">{{ $t('monitor.notifications') }}</h2>
-                        <span class="text-sm text-gray-500 self-center justify-self-center"
-                            >Not implemented yet.</span
-                        >
+                        <notification-coupler :monitor-id="monitor.id" />
                     </div>
                     <div class="col-span-1 flex justify-between md:col-span-2 lg:col-span-3">
                         <div
                             class="inline-flex flex-col md:gap-4 md:flex-row md:col-span-2 lg:col-span-3"
-                        ></div>
+                        >
+                            <UButton
+                                v-if="formEditable && finalAction === DialogActions.CREATE"
+                                type="button"
+                                variant="outline"
+                                class="font-bold"
+                                color="success"
+                                :label="$t('monitor.create')"
+                                icon="i-heroicons-check"
+                                @click.prevent="create"
+                            />
+                            <UButton
+                                v-if="formEditable && finalAction === DialogActions.EDIT"
+                                type="button"
+                                variant="outline"
+                                color="success"
+                                :label="$t('monitor.update')"
+                                class="font-bold"
+                                icon="i-heroicons-check"
+                                @click.prevent="update"
+                            />
+                            <UButton
+                                v-if="finalAction === DialogActions.EDIT"
+                                type="button"
+                                variant="outline"
+                                class="font-bold"
+                                color="warning"
+                                :label="$t('cancel')"
+                                icon="i-heroicons-x-mark"
+                                @click.prevent="makeFormNonEditable"
+                            />
+                        </div>
                     </div>
                 </div>
             </LazyUForm>

@@ -31,7 +31,7 @@ export class MonitorRepository {
     async create(
         monitor: Omit<
             Monitor,
-            'id' | 'in_maintenance' | 'is_active' | 'job' | 'startJob' | 'stopJob'
+            'id' | 'in_maintenance' | 'is_active' | 'job' | 'startJob' | 'stopJob' | 'notified'
         >
     ): Promise<Monitor> {
         const [created] = await this.db<Monitor>('monitors').insert(monitor).returning('*')
@@ -73,6 +73,12 @@ export class MonitorRepository {
 
     async resume(id: number): Promise<void> {
         return this.db<Monitor>('monitors').where({ id }).update({ is_active: true })
+    }
+
+    async setNotified(monitor: Monitor, notified: boolean): Promise<void> {
+        await this.db<Monitor>('monitors')
+            .where({ id: monitor.id })
+            .update({ notified: notified ? 1 : 0 })
     }
 
     async registerHeartbeat(

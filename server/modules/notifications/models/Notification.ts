@@ -1,5 +1,3 @@
-import type { NotificationType } from '~~/server/modules/notifications/types/NotificationType'
-
 /**
  * @name Notification
  * @description Notification model
@@ -9,17 +7,17 @@ import type { NotificationType } from '~~/server/modules/notifications/types/Not
 export interface Notification {
     id: number
     name: string
-    notification_type: NotificationType
-    hostname: string
-    port: number
-    username: string
-    password: string
-    from: string
-    to: string
-    cc: string
-    bcc: string
-    subject: string
-    message: string
-    tls: boolean
+    notification_type: string
+    hostname?: string
+    port?: number
+    username?: string
+    password?: string
+    from?: string
+    to?: string
+    cc?: string
+    bcc?: string
+    subject?: string
+    message?: string
+    tls?: boolean
     is_active: boolean
 }

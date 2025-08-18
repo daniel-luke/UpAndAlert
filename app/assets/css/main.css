@@ -4,3 +4,17 @@
 button, a {
     @apply hover:cursor-pointer;
 }
+
+@theme static {
+    --color-brand-50: #f3fcf6;
+    --color-brand-100: #e6f9ec;
+    --color-brand-200: #c1f1d1;
+    --color-brand-300: #8be3ad;
+    --color-brand-400: #4fd97e;
+    --color-brand-500: #1fa34e;
+    --color-brand-600: #1fa34e;
+    --color-brand-700: #19843f;
+    --color-brand-800: #156634;
+    --color-brand-900: #124f2a;
+    --color-brand-950: #0a2d16;
+}

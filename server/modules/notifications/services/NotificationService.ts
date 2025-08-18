@@ -22,7 +22,7 @@ export class NotificationService {
         return NotificationService.instance
     }
 
-    async createNotification(notification: Notification) {
+    async createNotification(notification: Omit<Notification, 'id'>) {
         return await this.notificationRepository.createNotification(notification)
     }
 
@@ -32,6 +32,14 @@ export class NotificationService {
 
     async deleteNotification(notification: Notification) {
         return await this.notificationRepository.deleteNotification(notification)
+    }
+
+    async getNotificationById(id: number) {
+        return await this.notificationRepository.getNotificationById(id)
+    }
+
+    async getAllNotifications() {
+        return await this.notificationRepository.getAllNotifications()
     }
 
     async attachNotificationToMonitor(monitor: Monitor, notification: Notification) {
