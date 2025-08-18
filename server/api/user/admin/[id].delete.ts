@@ -1,13 +1,4 @@
-import { z } from 'zod'
 import { UserService } from '~~/server/modules/auth/services/UserService'
-
-const bodySchema = z.object({
-    first_name: z.string().optional(),
-    last_name: z.string().optional(),
-    email: z.string().email().optional(),
-    password: z.string().min(8).optional(),
-    is_admin: z.boolean().optional()
-})
 
 /**
  * @description Updates a user
