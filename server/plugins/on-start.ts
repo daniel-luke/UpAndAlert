@@ -61,7 +61,8 @@ async function bootstrap() {
             email: 'admin@system.local',
             password: randomPassword,
             first_name: 'Admin',
-            last_name: 'User'
+            last_name: 'User',
+            is_admin: true
         })
         .then(() => {
             logger.info(
